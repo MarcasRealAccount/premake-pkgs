@@ -24,7 +24,7 @@ index 0000000..49accfb
 +	pkg:setupCMake(vsInfo.buildTool, scriptDir, string.format("%s/build/", scriptDir), "-D USE_MSVC_RUNTIME_LIBRARY_DLL=1 -D GLFW_BUILD_TESTS=0 -D GLFW_BUILD_EXAMPLES=0 -D GLFW_BUILD_DOCS=0 -D GLFW_INSTALL=0")
 +	vsInfo:build(string.format("%s/build/GLFW.sln", scriptDir), {
 +		Debug = {
-+			path        = string.format("%s\\build\\src\\Debug\\", scriptDir),
++			path        = string.format("%s/build/src/Debug/", scriptDir),
 +			config      = "Debug",
 +			isStaticRT  = false,
 +			outputFiles = {
@@ -33,7 +33,7 @@ index 0000000..49accfb
 +			}
 +		},
 +		RelWithDebInfo = {
-+			path        = string.format("%s\\build\\src\\RelWithDebInfo\\", scriptDir),
++			path        = string.format("%s/build/src/RelWithDebInfo/", scriptDir),
 +			config      = "Release",
 +			isStaticRT  = false,
 +			outputFiles = {
@@ -42,7 +42,7 @@ index 0000000..49accfb
 +			}
 +		},
 +		Release = {
-+			path        = string.format("%s\\build\\src\\Release\\", scriptDir),
++			path        = string.format("%s/build/src/Release/", scriptDir),
 +			config      = "Dist",
 +			isStaticRT  = false,
 +			outputFiles = { "glfw3.lib" }
@@ -51,7 +51,7 @@ index 0000000..49accfb
 +	pkg:setupCMake(vsInfo.buildTool, scriptDir, string.format("%s/build-StaticRT/", scriptDir), "-D USE_MSVC_RUNTIME_LIBRARY_DLL=0 -D GLFW_BUILD_TESTS=0 -D GLFW_BUILD_EXAMPLES=0 -D GLFW_BUILD_DOCS=0 -D GLFW_INSTALL=0")
 +	vsInfo:build(string.format("%s/build-StaticRT/GLFW.sln", scriptDir), {
 +		Debug = {
-+			path        = string.format("%s\\build-StaticRT\\src\\Debug\\", scriptDir),
++			path        = string.format("%s/build-StaticRT/src/Debug/", scriptDir),
 +			config      = "Debug",
 +			isStaticRT  = true,
 +			outputFiles = {
@@ -60,7 +60,7 @@ index 0000000..49accfb
 +			}
 +		},
 +		RelWithDebInfo = {
-+			path        = string.format("%s\\build-StaticRT\\src\\RelWithDebInfo\\", scriptDir),
++			path        = string.format("%s/build-StaticRT/src/RelWithDebInfo/", scriptDir),
 +			config      = "Release",
 +			isStaticRT  = true,
 +			outputFiles = {
@@ -69,7 +69,7 @@ index 0000000..49accfb
 +			}
 +		},
 +		Release = {
-+			path        = string.format("%s\\build-StaticRT\\src\\Release\\", scriptDir),
++			path        = string.format("%s/build-StaticRT/src/Release/", scriptDir),
 +			config      = "Dist",
 +			isStaticRT  = true,
 +			outputFiles = { "glfw3.lib" }
@@ -104,7 +104,7 @@ index 0000000..7cc6bb6
 +	suffix = "-StaticRT"
 +end
 +libdirs({ common:scriptDir() .. string.format("/Bin/%s-%s-", common.host, common.arch) .. "%{cfg.buildcfg}" .. suffix })
-+links({ "glfw3.lib" })
++links({ "glfw3" })
 +externalincludedirs({ common:scriptDir() .. "/include/" })
 \ No newline at end of file
 -- 
