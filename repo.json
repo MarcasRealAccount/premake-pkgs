@@ -40,6 +40,22 @@
 					"depscript": "dep.lua"
 				}
 			]
+		},
+		{
+			"name": "glm",
+			"description": "OpenGL Mathematics (GLM)",
+			"current_version": "latest",
+			"versions": [
+				{
+					"name": "latest",
+					"path": "git+https://github.com/g-truc/glm.git",
+					"branch": "master",
+					"commit": "fc8f4bb442b9540969f2f3f351c4960d91bca17a",
+					"apply_patch": true,
+					"buildscript": "build.lua",
+					"depscript": "dep.lua"
+				}
+			]
 		}
 	]
 }
