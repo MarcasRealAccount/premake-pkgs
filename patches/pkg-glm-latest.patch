@@ -22,7 +22,7 @@ index 0000000..49accfb
 +if common.host == "windows" then
 +	local vsInfo = pkg:getVSInfo()
 +	pkg:setupCMake(vsInfo.buildTool, scriptDir, string.format("%s/build/", scriptDir), "-D BUILD_STATIC_LIBS=1 -D GLM_TEST_ENABLE=0")
-+	vsInfo:build(string.format("%s/build/", scriptDir), {
++	vsInfo:build(string.format("%s/build/glm.sln", scriptDir), {
 +		Debug = {
 +			path        = string.format("%s/build/glm/Debug/", scriptDir),
 +			config      = "Debug",
