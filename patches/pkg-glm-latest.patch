@@ -60,7 +60,7 @@ index 0000000..7cc6bb6
 @@ -0,0 +1,3 @@
 +libdirs({ common:scriptDir() .. string.format("/Bin/%s-%s-", common.host, common.arch) .. "%{cfg.buildcfg}" })
 +links({ "glm_static" })
-+externalinmcludedirs({ common:scriptDir() })
++externalincludedirs({ common:scriptDir() })
 \ No newline at end of file
 --
 2.38.1.windows.1
