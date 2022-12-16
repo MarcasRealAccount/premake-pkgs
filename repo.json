@@ -1,0 +1,45 @@
+{
+	"exts": [
+		{
+			"name": "premake-cmake",
+			"description": "Adds CMake generator",
+			"current_version": "1.0.0",
+			"versions": [
+				{
+					"name": "1.0.0",
+					"path": "git+https://github.com/MarcasRealAccount/premake-cmake",
+					"branch": "1.0.0"
+				}
+			]
+		},
+		{
+			"name": "premake-nasm",
+			"description": "Adds NASM support",
+			"current_version": "1.0.0",
+			"versions": [
+				{
+					"name": "1.0.0",
+					"path": "git+https://github.com/MarcasRealAccount/premake-nasm",
+					"branch": "1.0.0"
+				}
+			]
+		}
+	],
+	"pkgs": [
+		{
+			"name": "glfw",
+			"description": "A multi-platform library for OpenGL, OpenGL ES, Vulkan, window and input",
+			"current_version": "3.3.8",
+			"versions": [
+				{
+					"name": "3.3.8",
+					"path": "git+https://github.com/glfw/glfw.git",
+					"branch": "3.3.8",
+					"apply_patch": true,
+					"buildscript": "build.lua",
+					"depscript": "dep.lua"
+				}
+			]
+		}
+	]
+}
