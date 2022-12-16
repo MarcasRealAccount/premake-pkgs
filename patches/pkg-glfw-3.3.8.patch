@@ -1,12 +1,12 @@
 From 7c188261dfc6e3251af2231f59aec3c86d20de8a Mon Sep 17 00:00:00 2001
 From: MarcasRealAccount <thetremine.lumicks@gmail.com>
-Date: Fri, 16 Dec 2022 01:35:32 +0100
+Date: Fri, 16 Dec 2022 16:10:50 +0100
 Subject: [PATCH] Add premake scripts :>
 
 ---
- build.lua | 34 ++++++++++++++++++++++++++++++++++
- dep.lua   | 16 ++++++++++++++++
- 2 files changed, 50 insertions(+)
+ build.lua | 62 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ dep.lua   | 21 +++++++++++++++++++++
+ 2 files changed, 83 insertions(+)
  create mode 100644 build.lua
  create mode 100644 dep.lua
 
@@ -15,38 +15,66 @@ new file mode 100644
 index 0000000..49accfb
 --- /dev/null
 +++ b/build.lua
-@@ -0,0 +1,34 @@
+@@ -0,0 +1,62 @@
++local pkg       = premake.extensions.pkg
 +local scriptDir = common:scriptDir()
 +
 +if common.host == "windows" then
-+	function msbuildConfiguration(msbuild, configuration, outputConfig, suffix)
-+		if os.executef("%q \"%s\\build\\GLFW.sln\" -p:Configuration=%s -m", msbuild, scriptDir, configuration) > 0 then
-+			error(string.format("Failed to build %s configuration for glfw-3.3.8", configuration))
-+		end
-+		
-+		common:copyFile(string.format("%s\\build\\src\\%s\\glfw3.lib", scriptDir, configuration), string.format("%s\\Bin\\%s-%s-%s\\glfw3%s.lib", scriptDir, common.host, common.arch, outputConfig, suffix or ""))
-+	end
-+	
-+	local versionId = tonumber(os.outputof("\"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe\" -prerelease -latest -property catalog_productLine"):gmatch("%d+"))
-+	local version   = tonumber(os.outputof("\"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe\" -prerelease -latest -property catalog_productLineVersion"))
-+	local path      = os.outputof("\"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe\" -prerelease -latest -property installationPath")
-+	local buildTool = string.format("Visual Studio %d %d", versionId, version)
-+	
-+	if os.executef("cmake -S \"%s/\" -B \"%s/build/\" -G %q -D GLFW_USE_WAYLAND=1 -D USE_MSVC_RUNTIME_LIBRARY_DLL=1", scriptDir, scriptDir, buildTool) > 1 then
-+		error("Failed to run cmake for glfw-3.3.8")
-+	end
-+	
-+	msbuildConfiguration(string.format("%s\\MSBuild\\Current\\Bin\\MSBuild.exe", path), "Debug", "Debug")
-+	msbuildConfiguration(string.format("%s\\MSBuild\\Current\\Bin\\MSBuild.exe", path), "RelWithDebInfo", "Release")
-+	msbuildConfiguration(string.format("%s\\MSBuild\\Current\\Bin\\MSBuild.exe", path), "Release", "Dist")
-+	
-+	if os.executef("cmake -S \"%s/\" -B \"%s/build/\" -G %q -D GLFW_USE_WAYLAND=1 -D USE_MSVC_RUNTIME_LIBRARY_DLL=0", scriptDir, scriptDir, buildTool) > 1 then
-+		error("Failed to run cmake for glfw-3.3.8")
-+	end
-+	
-+	msbuildConfiguration(string.format("%s\\MSBuild\\Current\\Bin\\MSBuild.exe", path), "Debug", "Debug", "s")
-+	msbuildConfiguration(string.format("%s\\MSBuild\\Current\\Bin\\MSBuild.exe", path), "RelWithDebInfo", "Release", "s")
-+	msbuildConfiguration(string.format("%s\\MSBuild\\Current\\Bin\\MSBuild.exe", path), "Release", "Dist", "s")
++	local vsInfo = pkg:getVSInfo()
++	pkg:setupCMake(vsInfo.buildTool, scriptDir, string.format("%s/build/", scriptDir), "-D USE_MSVC_RUNTIME_LIBRARY_DLL=1 -D GLFW_BUILD_TESTS=0 -D GLFW_BUILD_EXAMPLES=0 -D GLFW_BUILD_DOCS=0 -D GLFW_INSTALL=0")
++	vsInfo:build(string.format("%s/build/GLFW.sln", scriptDir), {
++		Debug = {
++			path        = string.format("%s\\build\\src\\Debug\\", scriptDir),
++			config      = "Debug",
++			isStaticRT  = false,
++			outputFiles = {
++				"glfw3.lib",
++				"glfw3.pdb"
++			}
++		},
++		RelWithDebInfo = {
++			path        = string.format("%s\\build\\src\\RelWithDebInfo\\", scriptDir),
++			config      = "Release",
++			isStaticRT  = false,
++			outputFiles = {
++				"glfw3.lib",
++				"glfw3.pdb"
++			}
++		},
++		Release = {
++			path        = string.format("%s\\build\\src\\Release\\", scriptDir),
++			config      = "Dist",
++			isStaticRT  = false,
++			outputFiles = { "glfw3.lib" }
++		}
++	})
++	pkg:setupCMake(vsInfo.buildTool, scriptDir, string.format("%s/build-StaticRT/", scriptDir), "-D USE_MSVC_RUNTIME_LIBRARY_DLL=0 -D GLFW_BUILD_TESTS=0 -D GLFW_BUILD_EXAMPLES=0 -D GLFW_BUILD_DOCS=0 -D GLFW_INSTALL=0")
++	vsInfo:build(string.format("%s/build-StaticRT/GLFW.sln", scriptDir), {
++		Debug = {
++			path        = string.format("%s\\build-StaticRT\\src\\Debug\\", scriptDir),
++			config      = "Debug",
++			isStaticRT  = true,
++			outputFiles = {
++				"glfw3.lib",
++				"glfw3.pdb"
++			}
++		},
++		RelWithDebInfo = {
++			path        = string.format("%s\\build-StaticRT\\src\\RelWithDebInfo\\", scriptDir),
++			config      = "Release",
++			isStaticRT  = true,
++			outputFiles = {
++				"glfw3.lib",
++				"glfw3.pdb"
++			}
++		},
++		Release = {
++			path        = string.format("%s\\build-StaticRT\\src\\Release\\", scriptDir),
++			config      = "Dist",
++			isStaticRT  = true,
++			outputFiles = { "glfw3.lib" }
++		}
++	})
 +else
 +	error("Sorry, glfw-3.3.8 only supports windows atm, hehe :> (Couldn't be arsed to do make yet xD)")
 +end
@@ -56,7 +84,7 @@ new file mode 100644
 index 0000000..7cc6bb6
 --- /dev/null
 +++ b/dep.lua
-@@ -0,0 +1,16 @@
+@@ -0,0 +1,21 @@
 +filter("system:linux")
 +	links({ "dl" })
 +	linkoptions({ "-pthread" })
@@ -70,7 +98,12 @@ index 0000000..7cc6bb6
 +
 +filter({})
 +
-+libdirs({ common:scriptDir() .. string.format("/Bin/%s-%s-", common.host, common.arch) .. "%{cfg.buildcfg}" })
++local staticRT = common:projectStaticRuntime()
++local suffix   = ""
++if staticRT then
++	suffix = "-StaticRT"
++end
++libdirs({ common:scriptDir() .. string.format("/Bin/%s-%s-", common.host, common.arch) .. "%{cfg.buildcfg}" .. suffix })
 +links({ "glfw3.lib" })
 +externalincludedirs({ common:scriptDir() .. "/include/" })
 \ No newline at end of file
