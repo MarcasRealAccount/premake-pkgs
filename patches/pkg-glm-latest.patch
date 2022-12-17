@@ -4,9 +4,9 @@ Date: Fri, 16 Dec 2022 16:25:00 +0100
 Subject: [PATCH] Add premake scripts :>
 
 ---
- build.lua | 35 +++++++++++++++++++++++++++++++++++
+ build.lua | 20 ++++++++++++++++++++
  dep.lua   | 3  +++
- 2 files changed, 38 insertions(+)
+ 2 files changed, 23 insertions(+)
  create mode 100644 build.lua
  create mode 100644 dep.lua
 
@@ -15,42 +15,27 @@ new file mode 100644
 index 0000000..49accfb
 --- /dev/null
 +++ b/build.lua
-@@ -0,0 +1,35 @@
+@@ -0,0 +1,20 @@
 +local pkg       = premake.extensions.pkg
 +local scriptDir = common:scriptDir()
 +
-+if common.host == "windows" then
-+	local vsInfo = pkg:getVSInfo()
-+	pkg:setupCMake(vsInfo.buildTool, scriptDir, string.format("%s/build/", scriptDir), "-D BUILD_STATIC_LIBS=1 -D GLM_TEST_ENABLE=0")
-+	vsInfo:build(string.format("%s/build/glm.sln", scriptDir), {
-+		Debug = {
-+			path        = string.format("%s/build/glm/Debug/", scriptDir),
-+			config      = "Debug",
-+			isStaticRT  = false,
-+			outputFiles = {
-+				"glm_static.lib",
-+				"glm_static.pdb"
-+			}
-+		},
-+		RelWithDebInfo = {
-+			path        = string.format("%s/build/glm/RelWithDebInfo/", scriptDir),
-+			config      = "Release",
-+			isStaticRT  = false,
-+			outputFiles = {
-+				"glm_static.lib",
-+				"glm_static.pdb"
-+			}
-+		},
-+		Release = {
-+			path        = string.format("%s/build/glm/Release/", scriptDir),
-+			config      = "Dist",
-+			isStaticRT  = false,
-+			outputFiles = { "glm_static.lib" }
-+		}
-+	})
-+else
-+	error("Sorry, glm-latest only supports windows atm, hehe :> (Couldn't be arsed to do make yet xD)")
-+end
++local buildTool = pkg:setupCMake("glm", { "Debug", "RelWithDebInfo", "Release" }, scriptDir, "build/", "-D BUILD_STATIC_LIBS=1 -D GLM_TEST_ENABLE=0")
++buildTool:mapConfigs({
++	Debug = {
++		config  = "Debug",
++		targets = { glm_static = { path = "glm/", outputFiles = common:libName("glm_static", true) } }
++	},
++	RelWithDebInfo = {
++		config  = "Release",
++		targets = { glm_static = { path = "glm/", outputFiles = common:libName("glm_static", true) } }
++	},
++	Release = {
++		config  = "Dist",
++		targets = { glm_static = { path = "glm/", outputFiles = common:libName("glm_static", false) } }
++	}
++})
++buildTool:build()
++buildTool:cleanTemp()
 \ No newline at end of file
 diff --git a/dep.lua b/dep.lua
 new file mode 100644
