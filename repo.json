@@ -3,7 +3,7 @@
 		{
 			"name": "premake-cmake",
 			"description": "Adds CMake generator",
-			"current_version": "1.0.0",
+			"latest_version": "1.0.0",
 			"versions": [
 				{
 					"name": "1.0.0",
@@ -15,7 +15,7 @@
 		{
 			"name": "premake-nasm",
 			"description": "Adds NASM support",
-			"current_version": "1.0.0",
+			"latest_version": "1.0.0",
 			"versions": [
 				{
 					"name": "1.0.0",
@@ -29,13 +29,14 @@
 		{
 			"name": "glfw",
 			"description": "A multi-platform library for OpenGL, OpenGL ES, Vulkan, window and input",
-			"current_version": "3.3.8",
+			"latest_version": "3.3.8",
 			"versions": [
 				{
 					"name": "3.3.8",
 					"path": "git+https://github.com/glfw/glfw.git",
 					"branch": "3.3.8",
 					"apply_patch": true,
+					"patch_version": 0,
 					"buildscript": "build.lua",
 					"depscript": "dep.lua"
 				}
@@ -44,7 +45,7 @@
 		{
 			"name": "glm",
 			"description": "OpenGL Mathematics (GLM)",
-			"current_version": "latest",
+			"latest_version": "latest",
 			"versions": [
 				{
 					"name": "latest",
@@ -52,6 +53,7 @@
 					"branch": "master",
 					"commit": "fc8f4bb442b9540969f2f3f351c4960d91bca17a",
 					"apply_patch": true,
+					"patch_version": 0,
 					"buildscript": "build.lua",
 					"depscript": "dep.lua"
 				}
@@ -60,13 +62,14 @@
 		{
 			"name": "imgui",
 			"description": "Dear ImGui: Bloat-free Graphical User interface for C++ with minimal dependencies",
-			"current_version": "1.89.1",
+			"latest_version": "1.89.1",
 			"versions": [
 				{
 					"name": "1.89.1",
 					"path": "git+https://github.com/ocornut/imgui.git",
 					"branch": "v1.89.1",
 					"apply_patch": true,
+					"patch_version": 0,
 					"buildscript": "build.lua",
 					"depscript": "dep.lua"
 				},
@@ -76,6 +79,7 @@
 					"branch": "docking",
 					"commit": "c191faf0ba478e9c58a69c63306986a21ebfb6e4",
 					"apply_patch": true,
+					"patch_version": 0,
 					"buildscript": "build.lua",
 					"depscript": "dep.lua"
 				}
