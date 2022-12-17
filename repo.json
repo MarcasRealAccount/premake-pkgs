@@ -56,6 +56,30 @@
 					"depscript": "dep.lua"
 				}
 			]
+		},
+		{
+			"name": "imgui",
+			"description": "Dear ImGui: Bloat-free Graphical User interface for C++ with minimal dependencies",
+			"current_version": "1.89.1",
+			"versions": [
+				{
+					"name": "1.89.1",
+					"path": "git+https://github.com/ocornut/imgui.git",
+					"branch": "v1.89.1",
+					"apply_patch": true,
+					"buildscript": "build.lua",
+					"depscript": "dep.lua"
+				},
+				{
+					"name": "docking-latest",
+					"path": "git+https://github.com/ocornut/imgui.git",
+					"branch": "docking",
+					"commit": "c191faf0ba478e9c58a69c63306986a21ebfb6e4",
+					"apply_patch": true,
+					"buildscript": "build.lua",
+					"depscript": "dep.lua"
+				}
+			]
 		}
 	]
 }
