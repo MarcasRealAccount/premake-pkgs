@@ -69,7 +69,7 @@
 					"path": "git+https://github.com/ocornut/imgui.git",
 					"branch": "v1.89.1",
 					"apply_patch": true,
-					"patch_version": 0,
+					"patch_version": 4,
 					"buildscript": "build.lua",
 					"depscript": "dep.lua"
 				},
@@ -79,7 +79,7 @@
 					"branch": "docking",
 					"commit": "c191faf0ba478e9c58a69c63306986a21ebfb6e4",
 					"apply_patch": true,
-					"patch_version": 0,
+					"patch_version": 4,
 					"buildscript": "build.lua",
 					"depscript": "dep.lua"
 				}
