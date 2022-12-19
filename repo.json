@@ -124,6 +124,23 @@
 					"depscript": "dep.lua"
 				}
 			]
+		},
+		{
+			"name": "stb",
+			"description": "stb single-file public domain libraries for C/C++",
+			"latest_version": "latest",
+			"versions": [
+				{
+					"version": "latest",
+					"path": "git+https://github.com/nothings/stb.git",
+					"branch": "master",
+					"commit": "8b5f1f37b5b75829fc72d38e7b5d4bcbf8a26d55",
+					"apply_patch": true,
+					"patch_version": 0,
+					"buildscript": "build.lua",
+					"depscript": "dep.lua"
+				}
+			]
 		}
 	]
 }
