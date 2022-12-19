@@ -119,7 +119,7 @@
 					"path": "git+https://github.com/gabime/spdlog.git",
 					"branch": "v1.11.0",
 					"apply_patch": true,
-					"patch_version": 0,
+					"patch_version": 1,
 					"buildscript": "build.lua",
 					"depscript": "dep.lua"
 				}

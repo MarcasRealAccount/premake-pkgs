@@ -47,7 +47,7 @@ new file mode 100644
 +filter("configurations:not Debug")
 +	links({ "spdlog" })
 +filter({})
-+defines({ "SPDLOG_COMPILED_LIB" })
++defines({ "SPDLOG_COMPILED_LIB", "FMT_CONSTEVAL=" })
 +externalincludedirs({ common:scriptDir() .. "/include/" })
 \ No newline at end of file
 --
