@@ -108,6 +108,22 @@
 					"depscript": "dep.lua"
 				}
 			]
+		},
+		{
+			"name": "spdlog",
+			"description": "Fast C++ logging library.",
+			"latest_version": [ 1, 11, 0 ],
+			"versions": [
+				{
+					"version": [ 1, 11, 0 ],
+					"path": "git+https://github.com/gabime/spdlog.git",
+					"branch": "v1.11.0",
+					"apply_patch": true,
+					"patch_version": 0,
+					"buildscript": "build.lua",
+					"depscript": "dep.lua"
+				}
+			]
 		}
 	]
 }

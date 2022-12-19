@@ -1,0 +1,54 @@
+From bf26cf7f60741045225744350b6424b8ece359cc Mon Sep 17 00:00:00 2001
+From: MarcasRealAccount <thetremine.lumicks@gmail.com>
+Date: Mon, 19 Dec 2022 22:47:47 
+Subject: [PATCH] Add premake scripts :>
+
+---
+ build.lua | 20 ++++++++++++++++++++
+ dep.lua | 8 ++++++++
+ 2 files changed, 28 insertions(+)
+ create mode 100644 build.lua
+ create mode 100644 dep.lua
+
+diff --git a/build.lua b/build.lua
+new file mode 100644
+--- /dev/null
++++ b/build.lua
+@@ -1,0 +1,20 @@
++local pkg = premake.extensions.pkg
++local scriptDir = common:scriptDir()
++
++local buildTool = pkg:setupCMake("spdlog", { "Debug", "RelWithDebInfo", "Release" }, scriptDir, "build/", "-D SPDLOG_BUILD_EXAMPLE=0 -D SPDLOG_INSTALL=0")
++buildTool:mapConfigs({
++	Debug = {
++		config  = "Debug",
++		targets = { spdlog = { path = "", outputFiles = common:libName("spdlogd", true) } }
++	},
++	RelWithDebInfo = {
++		config  = "Release",
++		targets = { spdlog = { path = "", outputFiles = common:libName("spdlog", true) } }
++	},
++	Release = {
++		config  = "Dist",
++		targets = { spdlog = { path = "", outputFiles = common:libName("spdlog", false) } }
++	}
++})
++buildTool:build()
++buildTool:cleanTemp()
+\ No newline at end of file
+diff --git a/dep.lua b/dep.lua
+new file mode 100644
+--- /dev/null
++++ b/dep.lua
+@@ -1,0 +1,8 @@
++libdirs({ common:scriptDir() .. string.format("/Bin/%s-%s-", common.host, common.arch) .. "%{cfg.buildcfg}" })
++filter("configurations:Debug")
++	links({ "spdlogd" })
++filter("configurations:not Debug")
++	links({ "spdlog" })
++filter({})
++defines({ "SPDLOG_COMPILED_LIB" })
++externalincludedirs({ common:scriptDir() .. "/include/" })
+\ No newline at end of file
+--
+2.38.1.windows.1
