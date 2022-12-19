@@ -5,15 +5,21 @@ for pkg in os.listdir("newPatches"):
 	path      = "newPatches/" + pkg
 	repo      = ""
 	branch    = ""
+	commit    = ""
 	committer = ""
 	with open(path + "/info.txt", mode="r") as f:
 		repo      = f.readline().strip()
-		branch    = f.readline().strip()
+		temp      = f.readline().strip().split("+")
+		branch    = temp[0]
+		if len(temp) > 1:
+			commit = temp[1]
 		committer = f.readline().strip()
 	print(f"{repo}\n{branch}\n{committer}")
-	os.system(f"git clone --depth=1 --branch={branch} {repo} pkgs/{pkg}/")
+	os.system(f"git clone --depth=1 --branch={branch} {repo} newPkgs/{pkg}/")
+	if len(commit) > 0:
+		os.system(f"git -C newPkgs/{pkg}/ checkout {commit}")
 	latestCommit = ""
-	with open(f"pkgs/{pkg}/.git/HEAD", mode="r") as f:
+	with open(f"newPkgs/{pkg}/.git/HEAD", mode="r") as f:
 		latestCommit = f.readline().strip()
 	now             = datetime.datetime.now()
 	patch           = f"From {latestCommit} Mon Sep 17 00:00:00 2001\nFrom: {committer}\nDate: {now:%a, %d %b %Y %H:%M:%S %z}\nSubject: [PATCH] Add premake scripts :>\n\n---\n"
