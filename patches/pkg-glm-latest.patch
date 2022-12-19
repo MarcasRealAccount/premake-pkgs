@@ -12,7 +12,6 @@ Subject: [PATCH] Add premake scripts :>
 
 diff --git a/build.lua b/build.lua
 new file mode 100644
-index 0000000..49accfb
 --- /dev/null
 +++ b/build.lua
 @@ -0,0 +1,20 @@
@@ -39,7 +38,6 @@ index 0000000..49accfb
 \ No newline at end of file
 diff --git a/dep.lua b/dep.lua
 new file mode 100644
-index 0000000..7cc6bb6
 --- /dev/null
 +++ b/dep.lua
 @@ -0,0 +1,3 @@

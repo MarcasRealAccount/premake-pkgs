@@ -1,3 +1,4 @@
 /exts/
 /pkgs/
 *.DS_Store
+/newPatches/
