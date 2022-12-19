@@ -41,6 +41,11 @@ for pkg in os.listdir("newPatches"):
 				lineCount       += 1
 				plusses         += "+"
 				totalInsertions += 1
+			if lineCount == 0:
+				lineCount        = 1
+				fileContent      = "+\n"
+				plusses          = "+"
+				totalInsertions += 1
 		patchHeader    += f" {f} | {lineCount} {plusses}\n"
 		patchHeaderEnd += f" create mode 100644 {f}\n"
 		patchBody      += f"diff --git a/{f} b/{f}\nnew file mode 100644\n--- /dev/null\n+++ b/{f}\n@@ -1,0 +1,{lineCount} @@\n{fileContent}\\ No newline at end of file\n"
