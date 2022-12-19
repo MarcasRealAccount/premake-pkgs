@@ -92,6 +92,22 @@
 					"depscript": "dep.lua"
 				}
 			]
+		},
+		{
+			"name": "entt",
+			"description": "Gaming meets modern C++ - a fast and reliable entity component system (ECS) and much more",
+			"latest_version": [ 3, 11, 1 ],
+			"versions": [
+				{
+					"version": [ 3, 11, 1 ],
+					"path": "git+https://github.com/skypjack/entt.git",
+					"branch": "v3.11.1",
+					"apply_patch": true,
+					"patch_version": 0,
+					"buildscript": "build.lua",
+					"depscript": "dep.lua"
+				}
+			]
 		}
 	]
 }
