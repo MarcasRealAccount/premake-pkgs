@@ -1,0 +1,29 @@
+From a33701196adfad74917046096bf5a2aa0ab0bb50 Mon Sep 17 00:00:00 2001
+From: MarcasRealAccount <thetremine.lumicks@gmail.com>
+Date: Thu, 22 Dec 2022 14:30:58 
+Subject: [PATCH] Add premake scripts :>
+
+---
+ build.lua | 1 +
+ dep.lua | 2 ++
+ 2 files changed, 3 insertions(+)
+ create mode 100644 build.lua
+ create mode 100644 dep.lua
+
+diff --git a/build.lua b/build.lua
+new file mode 100644
+--- /dev/null
++++ b/build.lua
+@@ -1,0 +1,1 @@
++
+\ No newline at end of file
+diff --git a/dep.lua b/dep.lua
+new file mode 100644
+--- /dev/null
++++ b/dep.lua
+@@ -1,0 +1,2 @@
++defines({ "FMT_HEADER_ONLY" })
++externalincludedirs({ common:scriptDir() .. "/include/" })
+\ No newline at end of file
+--
+2.38.1.windows.1

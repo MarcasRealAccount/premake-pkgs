@@ -141,6 +141,22 @@
 					"depscript": "dep.lua"
 				}
 			]
+		},
+		{
+			"name": "fmt",
+			"description": "A modern formatting library",
+			"latest_version": [ 9, 1, 0 ],
+			"versions": [
+				{
+					"version": [ 9, 1, 0 ],
+					"path": "git+https://github.com/fmtlib/fmt.git",
+					"branch": "9.1.0",
+					"apply_patch": true,
+					"patch_version": 0,
+					"buildscript": "build.lua",
+					"depscript": "dep.lua"
+				}
+			]
 		}
 	]
 }
