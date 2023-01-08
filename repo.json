@@ -157,6 +157,22 @@
 					"depscript": "dep.lua"
 				}
 			]
+		},
+		{
+			"name": "simdjson",
+			"description": "Parsing gigabytes of JSON per second",
+			"latest_version": [ 3, 0, 1 ],
+			"versions": [
+				{
+					"version": [ 3, 0, 1 ],
+					"path": "git+https://github.com/simdjson/simdjson.git",
+					"branch": "v3.0.1",
+					"apply_patch": true,
+					"patch_version": 0,
+					"buildscript": "build.lua",
+					"depscript": "dep.lua"
+				}
+			]
 		}
 	]
 }

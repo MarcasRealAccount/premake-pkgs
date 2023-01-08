@@ -1,0 +1,49 @@
+From 0d2455029d845e801809dd54b01ae47173d7d8e8 Mon Sep 17 00:00:00 2001
+From: MarcasRealAccount <thetremine.lumicks@gmail.com>
+Date: Thu, 29 Dec 2022 21:13:05 
+Subject: [PATCH] Add premake scripts :>
+
+---
+ build.lua | 20 ++++++++++++++++++++
+ dep.lua | 3 +++
+ 2 files changed, 23 insertions(+)
+ create mode 100644 build.lua
+ create mode 100644 dep.lua
+
+diff --git a/build.lua b/build.lua
+new file mode 100644
+--- /dev/null
++++ b/build.lua
+@@ -1,0 +1,20 @@
++local pkg       = premake.extensions.pkg
++local scriptDir = common:scriptDir()
++
++local buildTool = pkg:setupCMake("simdjson", { "Debug", "RelWithDebInfo", "Release" }, scriptDir, "build/", "")
++buildTool:mapConfigs({
++	Debug = {
++		config  = "Debug",
++		targets = { simdjson = { path = "", outputFiles = common:libName("simdjson", true) } }
++	},
++	RelWithDebInfo = {
++		config  = "Release",
++		targets = { simdjson = { path = "", outputFiles = common:libName("simdjson", true) } }
++	},
++	Release = {
++		config  = "Dist",
++		targets = { simdjson = { path = "", outputFiles = common:libName("simdjson", false) } }
++	}
++})
++buildTool:build()
++buildTool:cleanTemp()
+\ No newline at end of file
+diff --git a/dep.lua b/dep.lua
+new file mode 100644
+--- /dev/null
++++ b/dep.lua
+@@ -1,0 +1,3 @@
++libdirs({ common:scriptDir() .. string.format("/Bin/%s-%s-", common.host, common.arch) .. "%{cfg.buildcfg}" })
++links({ "simdjson" })
++externalincludedirs({ common:scriptDir() .. "/include/" })
+\ No newline at end of file
+--
+2.38.1.windows.1
