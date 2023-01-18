@@ -173,6 +173,22 @@
 					"depscript": "dep.lua"
 				}
 			]
+		},
+		{
+			"name": "zlib",
+			"description": "A massively spiffy yet delicately unobtrusive compression library.",
+			"latest_version": [ 1, 2, 13 ],
+			"versions": [
+				{
+					"version": [ 1, 2, 13 ],
+					"path": "git+https://github.com/madler/zlib.git",
+					"branch": "v1.2.13",
+					"apply_patch": true,
+					"patch_version": 0,
+					"buildscript": "build.lua",
+					"depscript": "dep.lua"
+				}
+			]
 		}
 	]
 }
