@@ -1,6 +1,6 @@
 From a8df192df022ed6ac447e7b7ada718c4c4824b41 Thu Nov 24 21:24:00 2022
 From: MarcasRealAccount <thetremine.lumicks@gmail.com>
-Date: Fri, 16 Dec 2022 17:54:00 +0100
+Date: Fri, 18 Jan 2023 16:35:00 +0100
 Subject: [PATCH] Add premake scripts :>
 
 ---
@@ -71,21 +71,21 @@ new file mode 100644
 +	Debug = {
 +		config  = "Debug",
 +		targets = {
-+			imgui      = { path = "imgui/", outputFiles = common:libName("imgui", true) }
++			imgui      = { path = "imgui/", outputFiles = common:libName("imgui", true) },
 +			imgui_demo = { path = "imgui_demo/", outputFiles = common:libName("imgui_demo", true) }
 +		}
 +	}
 +	Release = {
 +		config  = "Release",
 +		targets = {
-+			imgui      = { path = "imgui/", outputFiles = common:libName("imgui", true) }
++			imgui      = { path = "imgui/", outputFiles = common:libName("imgui", true) },
 +			imgui_demo = { path = "imgui_demo/", outputFiles = common:libName("imgui_demo", true) }
 +		}
 +	}
 +	Dist = {
 +		config  = "Dist",
 +		targets = {
-+			imgui      = { path = "imgui/", outputFiles = common:libName("imgui", false) }
++			imgui      = { path = "imgui/", outputFiles = common:libName("imgui", false) },
 +			imgui_demo = { path = "imgui_demo/", outputFiles = common:libName("imgui_demo", false) }
 +		}
 +	}

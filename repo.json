@@ -70,7 +70,7 @@
 					"path": "git+https://github.com/ocornut/imgui.git",
 					"branch": "v1.89.1",
 					"apply_patch": true,
-					"patch_version": 4,
+					"patch_version": 5,
 					"buildscript": "build.lua",
 					"depscript": "dep.lua"
 				}
