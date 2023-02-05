@@ -1,6 +1,6 @@
 From 7c188261dfc6e3251af2231f59aec3c86d20de8a Mon Sep 17 00:00:00 2001
 From: MarcasRealAccount <thetremine.lumicks@gmail.com>
-Date: Fri, 16 Dec 2022 16:10:50 +0100
+Date: Sun, 05 Feb 2023 19:47:00 +0100
 Subject: [PATCH] Add premake scripts :>
 
 ---
@@ -42,7 +42,7 @@ new file mode 100644
 +++ b/dep.lua
 @@ -0,0 +1,16 @@
 +filter("system:linux")
-+	links({ "dl" })
++	links({ "dl", "X11" })
 +	linkoptions({ "-pthread" })
 +
 +filter("system:macosx")
