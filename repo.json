@@ -205,6 +205,22 @@
 					"depscript": "dep.lua"
 				}
 			]
+		},
+		{
+			"name": "libusb",
+			"description": "A cross-platform library to access USB devices",
+			"latest_version": [ 1, 0, 26 ],
+			"versions": [
+				{
+					"version": [ 1, 0, 26 ],
+					"path": "git+https://github.com/libusb/libusb.git",
+					"branch": "v1.0.26",
+					"apply_patch": true,
+					"patch_version": 0,
+					"buildscript": "build.lua",
+					"depscript": "dep.lua"
+				}
+			]
 		}
 	]
 }
