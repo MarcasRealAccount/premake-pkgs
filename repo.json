@@ -237,7 +237,23 @@
 					"depscript": "dep.lua"
 				}
 			]
-		}
+		},
+		{
+			"name": "opengl",
+			"description": "premake-pkg Package for an OpenGL loader generator",
+			"latest_version": [ 1, 0, 0 ],
+			"versions": [
+				{
+					"version": [ 1, 0, 0 ],
+					"path": "git+https://github.com/MarcasRealAccount/opengl-pkg.git",
+					"branch": "main",
+					"commit": "941905eab407b870c948e682d00648e8c07ebe59",
+					"apply_patch": false,
+					"patch_version": 0,
+					"buildscript": "build.lua",
+					"depscript": "dep.lua"
+				}
+			]
 		}
 	]
 }
