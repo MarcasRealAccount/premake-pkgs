@@ -28,6 +28,31 @@
 	],
 	"pkgs": [
 		{
+			"name": "commonbuild",
+			"description": "",
+			"latest_version": [ 1, 0, 2 ],
+			"versions": [
+				{
+					"version": [ 1, 0, 2 ],
+					"path": "git+https://github.com/MarcasRealAccount/CommonBuild.git",
+					"branch": "1.0.2",
+					"apply_patch": false,
+					"patch_version": 0,
+					"buildscript": "build.lua",
+					"depscript": "dep.lua"
+				},
+				{
+					"version": [ 1, 0, 1 ],
+					"path": "git+https://github.com/MarcasRealAccount/CommonBuild.git",
+					"branch": "1.0.1",
+					"apply_patch": false,
+					"patch_version": 0,
+					"buildscript": "build.lua",
+					"depscript": "dep.lua"
+				}
+			]
+		},
+		{
 			"name": "glfw",
 			"description": "A multi-platform library for OpenGL, OpenGL ES, Vulkan, window and input",
 			"latest_version": [ 3, 3, 8 ],
@@ -225,12 +250,12 @@
 		{
 			"name": "simplexnoise",
 			"description": "Simplex Noise for C++20",
-			"latest_version": [ 1, 0, 1 ],
+			"latest_version": [ 1, 0, 4 ],
 			"versions": [
 				{
-					"version": [ 1, 0, 1 ],
+					"version": [ 1, 0, 4 ],
 					"path": "git+https://github.com/MarcasRealAccount/SimplexNoise.git",
-					"branch": "1.0.1",
+					"branch": "1.0.4",
 					"apply_patch": false,
 					"patch_version": 0,
 					"buildscript": "build.lua",
