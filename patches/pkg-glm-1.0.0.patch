@@ -4,9 +4,9 @@ Date: Fri, 16 Dec 2022 16:25:00 +0100
 Subject: [PATCH] Add premake scripts :>
 
 ---
- build.lua | 20 ++++++++++++++++++++
- dep.lua   | 3  +++
- 2 files changed, 23 insertions(+)
+ build.lua | 21 +++++++++++++++++++++
+ dep.lua   | 5  +++++
+ 2 files changed, 26 insertions(+)
  create mode 100644 build.lua
  create mode 100644 dep.lua
 
@@ -14,23 +14,24 @@ diff --git a/build.lua b/build.lua
 new file mode 100644
 --- /dev/null
 +++ b/build.lua
-@@ -0,0 +1,20 @@
+@@ -0,0 +1,21 @@
 +local pkg       = premake.extensions.pkg
-+local scriptDir = common:scriptDir()
++local scriptDir = pkg:scriptDir()
++local cmake     = pkg.builders.cmake
 +
-+local buildTool = pkg:setupCMake("glm", { "Debug", "RelWithDebInfo", "Release" }, scriptDir, "build/", "-D BUILD_STATIC_LIBS=1 -D GLM_TEST_ENABLE=0")
++local buildTool = cmake:setup("glm", { "Debug", "RelWithDebInfo", "Release" }, scriptDir, "build/", "-D BUILD_STATIC_LIBS=1 -D GLM_TEST_ENABLE=0")
 +buildTool:mapConfigs({
 +	Debug = {
 +		config  = "Debug",
-+		targets = { glm_static = { path = "glm/", outputFiles = common:libName("glm_static", true) } }
++		targets = { glm_static = { path = "glm/", outputFiles = pkg:libName("glm_static", true) } }
 +	},
 +	RelWithDebInfo = {
 +		config  = "Release",
-+		targets = { glm_static = { path = "glm/", outputFiles = common:libName("glm_static", true) } }
++		targets = { glm_static = { path = "glm/", outputFiles = pkg:libName("glm_static", true) } }
 +	},
 +	Release = {
 +		config  = "Dist",
-+		targets = { glm_static = { path = "glm/", outputFiles = common:libName("glm_static", false) } }
++		targets = { glm_static = { path = "glm/", outputFiles = pkg:libName("glm_static", false) } }
 +	}
 +})
 +buildTool:build()
@@ -40,10 +41,12 @@ diff --git a/dep.lua b/dep.lua
 new file mode 100644
 --- /dev/null
 +++ b/dep.lua
-@@ -0,0 +1,3 @@
-+libdirs({ common:scriptDir() .. string.format("/Bin/%s-%s-", common.host, common.arch) .. "%{cfg.buildcfg}" })
+@@ -0,0 +1,5 @@
++local pkg = premake.extensions.pkg
++
++libdirs({ pkg:scriptDir() .. string.format("/Bin/%s-%s-", os.host(), pkg.arch) .. "%{cfg.buildcfg}" })
 +links({ "glm_static" })
-+externalincludedirs({ common:scriptDir() })
++externalincludedirs({ pkg:scriptDir() })
 \ No newline at end of file
 --
 2.38.1.windows.1

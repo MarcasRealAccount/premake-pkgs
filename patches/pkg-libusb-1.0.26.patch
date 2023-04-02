@@ -4,10 +4,10 @@ Date: Sun, 19 Mar 2023 18:07:23
 Subject: [PATCH] Add premake scripts :>
 
 ---
- build.lua | 20 ++++++++++++++++++++
- dep.lua | 3 +++
+ build.lua | 21 +++++++++++++++++++++
+ dep.lua | 5 +++++
  premake5.lua | 59 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 82 insertions(+)
+ 3 files changed, 85 insertions(+)
  create mode 100644 build.lua
  create mode 100644 dep.lua
  create mode 100644 premake5.lua
@@ -16,23 +16,24 @@ diff --git a/build.lua b/build.lua
 new file mode 100644
 --- /dev/null
 +++ b/build.lua
-@@ -1,0 +1,20 @@
+@@ -1,0 +1,21 @@
 +local pkg       = premake.extensions.pkg
-+local scriptDir = common:scriptDir()
++local scriptDir = pkg:scriptDir()
++local premake   = pkg.builders.premake
 +
-+local buildTool = pkg:setupPremake("libusb", "amd64", { "Debug", "Release", "Dist" }, scriptDir, "build/", "%{targetpath}/%{config}")
++local buildTool = premake:setup("libusb", "amd64", { "Debug", "Release", "Dist" }, scriptDir, "build/", "%{targetpath}/%{config}")
 +buildTool:mapConfigs({
 +	Debug = {
 +		config  = "Debug",
-+		targets = { libusb = { path = "libusb/", outputFiles = common:libName("libusb", true) } }
++		targets = { libusb = { path = "libusb/", outputFiles = pkg:libName("libusb", true) } }
 +	},
 +	Release = {
 +		config  = "Release",
-+		targets = { libusb = { path = "libusb/", outputFiles = common:libName("libusb", true) } }
++		targets = { libusb = { path = "libusb/", outputFiles = pkg:libName("libusb", true) } }
 +	},
 +	Dist = {
 +		config  = "Dist",
-+		targets = { libusb = { path = "libusb/", outputFiles = common:libName("libusb", false) } }
++		targets = { libusb = { path = "libusb/", outputFiles = pkg:libName("libusb", false) } }
 +	}
 +})
 +buildTool:build()
@@ -42,10 +43,12 @@ diff --git a/dep.lua b/dep.lua
 new file mode 100644
 --- /dev/null
 +++ b/dep.lua
-@@ -1,0 +1,3 @@
-+libdirs({ common:scriptDir() .. string.format("/Bin/%s-%s-", common.host, common.arch) .. "%{cfg.buildcfg}" })
+@@ -1,0 +1,5 @@
++local pkg = premake.extensions.pkg
++
++libdirs({ pkg:scriptDir() .. string.format("/Bin/%s-%s-", os.host(), pkg.arch) .. "%{cfg.buildcfg}" })
 +links({ "libusb" })
-+externalincludedirs({ common:scriptDir() .. "/libusb/" })
++externalincludedirs({ pkg:scriptDir() .. "/libusb/" })
 \ No newline at end of file
 diff --git a/premake5.lua b/premake5.lua
 new file mode 100644

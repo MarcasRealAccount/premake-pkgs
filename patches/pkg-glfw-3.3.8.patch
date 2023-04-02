@@ -4,9 +4,9 @@ Date: Sun, 05 Feb 2023 19:47:00 +0100
 Subject: [PATCH] Add premake scripts :>
 
 ---
- build.lua | 20 ++++++++++++++++++++
- dep.lua   | 16 ++++++++++++++++
- 2 files changed, 36 insertions(+)
+ build.lua | 21 +++++++++++++++++++++
+ dep.lua   | 18 ++++++++++++++++++
+ 2 files changed, 39 insertions(+)
  create mode 100644 build.lua
  create mode 100644 dep.lua
 
@@ -14,23 +14,24 @@ diff --git a/build.lua b/build.lua
 new file mode 100644
 --- /dev/null
 +++ b/build.lua
-@@ -0,0 +1,20 @@
+@@ -0,0 +1,21 @@
 +local pkg       = premake.extensions.pkg
-+local scriptDir = common:scriptDir()
++local scriptDir = pkg:scriptDir()
++local cmake     = pkg.builders.cmake
 +
-+local buildTool = pkg:setupCMake("GLFW", { "Debug", "RelWithDebInfo", "Release" }, scriptDir, "build/", "-D USE_MSVC_RUNTIME_LIBRARY_DLL=1 -D GLFW_BUILD_TESTS=0 -D GLFW_BUILD_EXAMPLES=0 -D GLFW_BUILD_DOCS=0 -D GLFW_INSTALL=0")
++local buildTool = cmake:setup("GLFW", { "Debug", "RelWithDebInfo", "Release" }, scriptDir, "build/", "-D USE_MSVC_RUNTIME_LIBRARY_DLL=1 -D GLFW_BUILD_TESTS=0 -D GLFW_BUILD_EXAMPLES=0 -D GLFW_BUILD_DOCS=0 -D GLFW_INSTALL=0")
 +buildTool:mapConfigs({
 +	Debug = {
 +		config  = "Debug",
-+		targets = { glfw = { path = "src/", outputFiles = common:libName("glfw3", true) } }
++		targets = { glfw = { path = "src/", outputFiles = pkg:libName("glfw3", true) } }
 +	},
 +	RelWithDebInfo = {
 +		config  = "Release",
-+		targets = { glfw = { path = "src/", outputFiles = common:libName("glfw3", true) } }
++		targets = { glfw = { path = "src/", outputFiles = pkg:libName("glfw3", true) } }
 +	},
 +	Release = {
 +		config  = "Dist",
-+		targets = { glfw = { path = "src/", outputFiles = common:libName("glfw3", false) } }
++		targets = { glfw = { path = "src/", outputFiles = pkg:libName("glfw3", false) } }
 +	}
 +})
 +buildTool:build()
@@ -40,7 +41,9 @@ diff --git a/dep.lua b/dep.lua
 new file mode 100644
 --- /dev/null
 +++ b/dep.lua
-@@ -0,0 +1,16 @@
+@@ -0,0 +1,18 @@
++local pkg = premake.extensions.pkg
++
 +filter("system:linux")
 +	links({ "dl", "X11" })
 +	linkoptions({ "-pthread" })
@@ -54,9 +57,9 @@ new file mode 100644
 +
 +filter({})
 +
-+libdirs({ common:scriptDir() .. string.format("/Bin/%s-%s-", common.host, common.arch) .. "%{cfg.buildcfg}" })
++libdirs({ pkg:scriptDir() .. string.format("/Bin/%s-%s-", os.host(), pkg.arch) .. "%{cfg.buildcfg}" })
 +links({ "glfw3" })
-+externalincludedirs({ common:scriptDir() .. "/include/" })
++externalincludedirs({ pkg:scriptDir() .. "/include/" })
 \ No newline at end of file
 -- 
 2.38.1.windows.1

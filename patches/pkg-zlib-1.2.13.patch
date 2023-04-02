@@ -4,9 +4,9 @@ Date: Sun, 08 Jan 2023 21:44:05
 Subject: [PATCH] Add premake scripts :>
 
 ---
- build.lua | 21 +++++++++++++++++++++
- dep.lua | 7 +++++++
- 2 files changed, 28 insertions(+)
+ build.lua | 22 ++++++++++++++++++++++
+ dep.lua | 9 +++++++++
+ 2 files changed, 31 insertions(+)
  create mode 100644 build.lua
  create mode 100644 dep.lua
 
@@ -14,41 +14,44 @@ diff --git a/build.lua b/build.lua
 new file mode 100644
 --- /dev/null
 +++ b/build.lua
-@@ -1,0 +1,21 @@
+@@ -1,0 +1,22 @@
 +local pkg       = premake.extensions.pkg
-+local scriptDir = common:scriptDir()
++local scriptDir = pkg:scriptDir()
++local cmake     = pkg.builders.cmake
 +
-+local buildTool = pkg:setupCMake("zlib", { "Debug", "RelWithDebInfo", "Release" }, scriptDir, "build/", "")
++local buildTool = cmake:setup("zlib", { "Debug", "RelWithDebInfo", "Release" }, scriptDir, "build/", "")
 +buildTool:mapConfigs({
 +	Debug = {
 +		config  = "Debug",
-+		targets = { zlibstatic = { path = "", outputFiles = common:libName("zlibstaticd", true) } }
++		targets = { zlibstatic = { path = "", outputFiles = pkg:libName("zlibstaticd", true) } }
 +	},
 +	RelWithDebInfo = {
 +		config  = "Release",
-+		targets = { zlibstatic = { path = "", outputFiles = common:libName("zlibstatic", true) } }
++		targets = { zlibstatic = { path = "", outputFiles = pkg:libName("zlibstatic", true) } }
 +	},
 +	Release = {
 +		config  = "Dist",
-+		targets = { zlibstatic = { path = "", outputFiles = common:libName("zlibstatic", false) } }
++		targets = { zlibstatic = { path = "", outputFiles = pkg:libName("zlibstatic", false) } }
 +	}
 +})
 +buildTool:build()
 +buildTool:cleanTemp()
-+common:copyFile(common:scriptDir() .. "/zconf.h.included", common:scriptDir() .. "/zconf.h")
++pkg:copyFile(scriptDir .. "/zconf.h.included", scriptDir .. "/zconf.h")
 \ No newline at end of file
 diff --git a/dep.lua b/dep.lua
 new file mode 100644
 --- /dev/null
 +++ b/dep.lua
-@@ -1,0 +1,7 @@
-+libdirs({ common:scriptDir() .. string.format("/Bin/%s-%s-", common.host, common.arch) .. "%{cfg.buildcfg}" })
+@@ -1,0 +1,9 @@
++local pkg = premake.extensions.pkg
++
++libdirs({ pkg:scriptDir() .. string.format("/Bin/%s-%s-", os.host(), pkg.arch) .. "%{cfg.buildcfg}" })
 +filter({ "configurations:Debug" })
 +	links({ "zlibstaticd" })
 +filter({ "configurations:not Debug" })
 +	links({ "zlibstatic" })
 +filter({})
-+externalincludedirs({ common:scriptDir() .. "/" })
++externalincludedirs({ pkg:scriptDir() .. "/" })
 \ No newline at end of file
 --
 2.38.1.windows.1

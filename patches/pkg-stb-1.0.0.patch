@@ -4,25 +4,17 @@ Date: Mon, 19 Dec 2022 23:16:14
 Subject: [PATCH] Add premake scripts :>
 
 ---
- build.lua | 1 +
- dep.lua | 1 +
- 2 files changed, 2 insertions(+)
- create mode 100644 build.lua
+ dep.lua | 2 ++
+ 1 files changed, 2 insertions(+)
  create mode 100644 dep.lua
 
-diff --git a/build.lua b/build.lua
-new file mode 100644
---- /dev/null
-+++ b/build.lua
-@@ -1,0 +1,1 @@
-+
-\ No newline at end of file
 diff --git a/dep.lua b/dep.lua
 new file mode 100644
 --- /dev/null
 +++ b/dep.lua
-@@ -1,0 +1,1 @@
-+externalincludedirs({ common:scriptDir() })
+@@ -1,0 +1,2 @@
++local pkg = premake.extensions.pkg
++externalincludedirs({ pkg:scriptDir() })
 \ No newline at end of file
 --
 2.38.1.windows.1
