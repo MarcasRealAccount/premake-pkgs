@@ -145,7 +145,6 @@
 					"branch": "v3.11.1",
 					"apply_patch": true,
 					"patch_version": 0,
-					"buildscript": "build.lua",
 					"depscript": "dep.lua"
 				}
 			]
@@ -178,7 +177,6 @@
 					"commit": "8b5f1f37b5b75829fc72d38e7b5d4bcbf8a26d55",
 					"apply_patch": true,
 					"patch_version": 0,
-					"buildscript": "build.lua",
 					"depscript": "dep.lua"
 				}
 			]
@@ -194,7 +192,6 @@
 					"branch": "9.1.0",
 					"apply_patch": true,
 					"patch_version": 0,
-					"buildscript": "build.lua",
 					"depscript": "dep.lua"
 				}
 			]

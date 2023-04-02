@@ -19,7 +19,7 @@ new file mode 100644
 +local scriptDir = pkg:scriptDir()
 +local cmake     = pkg.builders.cmake
 +
-+local buildTool = pkg:setupCMake("spdlog", { "Debug", "RelWithDebInfo", "Release" }, scriptDir, "build/", "-D SPDLOG_BUILD_EXAMPLE=0 -D SPDLOG_INSTALL=0")
++local buildTool = cmake:setup("spdlog", { "Debug", "RelWithDebInfo", "Release" }, scriptDir, "build/", "-D SPDLOG_BUILD_EXAMPLE=0 -D SPDLOG_INSTALL=0")
 +buildTool:mapConfigs({
 +	Debug = {
 +		config  = "Debug",
