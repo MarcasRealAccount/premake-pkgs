@@ -123,7 +123,7 @@
 			"latest_version": [ 1, 0, 0 ],
 			"versions": [
 				{
-					"version": "latest",
+					"version": [ 1, 0, 0 ],
 					"path": "git+https://github.com/ocornut/imgui.git",
 					"branch": "docking",
 					"commit": "c191faf0ba478e9c58a69c63306986a21ebfb6e4",
@@ -169,10 +169,10 @@
 		{
 			"name": "stb",
 			"description": "stb single-file public domain libraries for C/C++",
-			"latest_version": "latest",
+			"latest_version": [ 1, 0, 0 ],
 			"versions": [
 				{
-					"version": "latest",
+					"version": [ 1, 0, 0 ],
 					"path": "git+https://github.com/nothings/stb.git",
 					"branch": "master",
 					"commit": "8b5f1f37b5b75829fc72d38e7b5d4bcbf8a26d55",
