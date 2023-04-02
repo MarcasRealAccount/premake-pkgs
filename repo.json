@@ -2,13 +2,25 @@
 	"version": [ 1, 0, 0 ],
 	"exts": [
 		{
+			"name": "premake-common",
+			"description": "",
+			"latest_version": [ 1, 0, 0 ],
+			"versions": [
+				{
+					"version": [ 1, 0, 0 ],
+					"path": "git+https://github.com/MarcasRealAccount/premake-common.git",
+					"branch": "1.0.0"
+				}
+			]
+		},
+		{
 			"name": "premake-cmake",
 			"description": "Adds CMake generator",
 			"latest_version": [ 1, 0, 0 ],
 			"versions": [
 				{
 					"version": [ 1, 0, 0 ],
-					"path": "git+https://github.com/MarcasRealAccount/premake-cmake",
+					"path": "git+https://github.com/MarcasRealAccount/premake-cmake.git",
 					"branch": "1.0.0"
 				}
 			]
@@ -20,7 +32,7 @@
 			"versions": [
 				{
 					"version": [ 1, 0, 0 ],
-					"path": "git+https://github.com/MarcasRealAccount/premake-nasm",
+					"path": "git+https://github.com/MarcasRealAccount/premake-nasm.git",
 					"branch": "1.0.0"
 				}
 			]
@@ -30,24 +42,12 @@
 		{
 			"name": "commonbuild",
 			"description": "",
-			"latest_version": [ 1, 0, 3 ],
+			"latest_version": [ 1, 0, 4 ],
 			"versions": [
 				{
-					"version": [ 1, 0, 3 ],
+					"version": [ 1, 0, 4 ],
 					"path": "git+https://github.com/MarcasRealAccount/CommonBuild.git",
-					"branch": "1.0.3",
-					"apply_patch": false,
-					"patch_version": 0,
-					"buildscript": "build.lua",
-					"depscript": "dep.lua"
-				},
-				{
-					"version": [ 1, 0, 1 ],
-					"path": "git+https://github.com/MarcasRealAccount/CommonBuild.git",
-					"branch": "1.0.1",
-					"apply_patch": false,
-					"patch_version": 0,
-					"buildscript": "build.lua",
+					"branch": "1.0.4",
 					"depscript": "dep.lua"
 				}
 			]
@@ -55,14 +55,12 @@
 		{
 			"name": "backtrace",
 			"description": "Backtrace library for C++",
-			"latest_version": [ 1, 0, 4 ],
+			"latest_version": [ 1, 0, 5 ],
 			"versions": [
 				{
-					"version": [ 1, 0, 4 ],
+					"version": [ 1, 0, 5 ],
 					"path": "git+https://github.com/MarcasRealAccount/Backtrace.git",
-					"branch": "1.0.4",
-					"apply_patch": false,
-					"patch_version": 0,
+					"branch": "1.0.5",
 					"buildscript": "build.lua",
 					"depscript": "dep.lua"
 				}
@@ -237,8 +235,6 @@
 					"version": [ 1, 0, 1 ],
 					"path": "git+https://github.com/MarcasRealAccount/vulkan-sdk-pkg.git",
 					"branch": "1.0.1",
-					"apply_patch": false,
-					"patch_version": 0,
 					"buildscript": "build.lua",
 					"depscript": "dep.lua"
 				}
@@ -263,14 +259,12 @@
 		{
 			"name": "simplexnoise",
 			"description": "Simplex Noise for C++20",
-			"latest_version": [ 1, 0, 5 ],
+			"latest_version": [ 1, 0, 6 ],
 			"versions": [
 				{
-					"version": [ 1, 0, 5 ],
+					"version": [ 1, 0, 6 ],
 					"path": "git+https://github.com/MarcasRealAccount/SimplexNoise.git",
-					"branch": "1.0.5",
-					"apply_patch": false,
-					"patch_version": 0,
+					"branch": "1.0.6",
 					"buildscript": "build.lua",
 					"depscript": "dep.lua"
 				}
