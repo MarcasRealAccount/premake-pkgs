@@ -1,0 +1,142 @@
+From 43ce4bd7fd34bcc730c1c7471c99995597415488 Mon Sep 17 00:00:00 2001
+From: MarcasRealAccount <thetremine.lumicks@gmail.com>
+Date: Tue, 04 Jul 2023 14:00:00 +0200
+Subject: [PATCH] Add premake scripts :>
+
+---
+ build.lua    | 21 +++++++++++++++++++++
+ dep.lua      |  5 +++++
+ premake5.lua | 85 +++++
+ 3 files changed, 111 insertions(+)
+ create mode 100644 build.lua
+ create mode 100644 dep.lua
+ create mode 100644 premake5.lua
+
+diff --git a/build.lua b/build.lua
+new file mode 100644
+--- /dev/null
++++ b/build.lua
+@@ -0,0 +1,21 @@
++local pkg       = premake.extensions.pkg
++local scriptDir = pkg:scriptDir()
++local premake   = pkg.builders.premake
++
++local buildTool = premake:setup("LuaJIT", "amd64", { "Debug", "Release", "Dist" }, scriptDir, "build/", "%{targetname}/%{config}")
++buildTool:mapConfigs({
++	Debug = {
++		config  = "Debug",
++		targets = { LuaJIT = { path = "LuaJIT/", outputFiles = pkg:libName("LuaJIT", true) } }
++	},
++	Release = {
++		config  = "Release",
++		targets = { LuaJIT = { path = "LuaJIT/", outputFiles = pkg:libName("LuaJIT", true) } }
++	},
++	Dist = {
++		config  = "Dist",
++		targets = { LuaJIT = { path = "LuaJIT/", outputFiles = pkg:libName("LuaJIT", false) } }
++	}
++})
++buildTool:build()
++buildTool:cleanTemp()
+\ No newline at end of file
+diff --git a/dep.lua b/dep.lua
+new file mode 100644
+--- /dev/null
+@@ -0,0 +1,5 @@
++local pkg = premake.extensions.pkg
++
++libdirs({ pkg:scriptDir() .. string.format("/Bin/%s-%s-", os.host(), pkg.arch) .. "%{cfg.buildcfg}" })
++links({ "LuaJIT" })
++externalincludedirs({ pkg:scriptDir() .. "/inc/" })
+\ No newline at end of file
+diff --git a/premake5.lua b/premake5.lua
+new file mode 100644
+--- /dev/null
+@@ -0,0 +1,85 @@
++workspace("LuaJIT")
++	location("build/")
++	common:addConfigs()
++
++	cdialect("C17")
++	cppdialect("C++20")
++	rtti("Off")
++	exceptionhandling("Off")
++	flags("MultiProcessorCompile")
++
++	project("MiniLua")
++		location("build/")
++		warnings("Off")
++		kind("ConsoleApp")
++		
++		targetdir("%{wks.location}/MiniLua/%{cfg.buildcfg}")
++		objdir("%{wks.location}/MiniLua/%{cfg.buildcfg}")
++
++		files({ "src/host/minilua.c" })
++		
++		postbuildcommands({
++			"\"%{cfg.linktarget.abspath}\" ../dynasm/dynasm.lua -LN -D WIN -D JIT -D FFI -D P64 -o ../src/host/buildvm_arch.h ../src/vm_x64.dasc"
++		})
++		
++	project("BuildVM")
++		location("build/")
++		warnings("Off")
++		kind("ConsoleApp")
++		
++		targetdir("%{wks.location}/BuildVM/%{cfg.buildcfg}")
++		objdir("%{wks.location}/BuildVM/%{cfg.buildcfg}")
++		
++		includedirs({ "src/", "dynasm/" })
++		files({ "src/host/buildvm*.c" })
++		
++		dependson({ "MiniLua" })
++		
++		allLibs = "../src/lib_base.c ../src/lib_math.c ../src/lib_bit.c ../src/lib_string.c ../src/lib_table.c ../src/lib_io.c ../src/lib_os.c ../src/lib_package.c ../src/lib_debug.c ../src/lib_jit.c ../src/lib_ffi.c ../src/lib_buffer.c"
++		
++		postbuildcommands({
++			"\"%{cfg.linktarget.abspath}\" -m peobj -o ../src/lj_vm.obj",
++			"\"%{cfg.linktarget.abspath}\" -m bcdef -o ../src/lj_bcdef.h " .. allLibs,
++			"\"%{cfg.linktarget.abspath}\" -m ffdef -o ../src/lj_ffdef.h " .. allLibs,
++			"\"%{cfg.linktarget.abspath}\" -m libdef -o ../src/lj_libdef.h " .. allLibs,
++			"\"%{cfg.linktarget.abspath}\" -m recdef -o ../src/lj_recdef.h " .. allLibs,
++			"\"%{cfg.linktarget.abspath}\" -m vmdef -o ../src/jit/vmdef.lua " .. allLibs,
++			"\"%{cfg.linktarget.abspath}\" -m folddef -o ../src/lj_folddef.h ../src/lj_opt_fold.c"
++		})
++	
++	project("LuaJIT")
++		location("build/")
++		warnings("Off")
++		kind("StaticLib")
++		
++		targetdir("%{wks.location}/LuaJIT/%{cfg.buildcfg}")
++		objdir("%{wks.location}/LuaJIT/%{cfg.buildcfg}")
++		
++		includedirs({ "src/" })
++		files({
++			"src/lj_*.h",
++			"src/lj_*.c",
++			"src/lib_*.h",
++			"src/lib_*.c"
++		})
++		removefiles({ "*.DS_Store" })
++		
++		libdirs({ "src/" })
++		links({ "lj_vm.obj" })
++		
++		dependson({ "BuildVM" })
++		
++		allHeaders = {
++			"lua.hpp",
++			"luajit.h",
++			"lua.h",
++			"lauxlib.h",
++			"lualib.h",
++			"luaconf.h"
++		}
++		
++		postbuildcommands({ "{MKDIR} ../inc/" })
++		
++		for _, header in pairs(allHeaders) do
++			postbuildcommands(string.format("{COPYFILE} ../src/%s ../inc/%s", header, header))
++		end
+--
+2.38.1.windows.1

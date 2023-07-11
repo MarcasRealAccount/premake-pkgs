@@ -1,0 +1,51 @@
+From 43ce4bd7fd34bcc730c1c7471c99995597415488 Mon Sep 17 00:00:00 2001
+From: MarcasRealAccount <thetremine.lumicks@gmail.com>
+Date: Mon, 03 Jul 2023 21:10:00 +0200
+Subject: [PATCH] Add premake scripts :>
+
+---
+ build.lua | 21 +++++++++++++++++++++
+ dep.lua   |  5 +++++
+ 2 files changed, 26 insertions(+)
+ create mode 100644 build.lua
+ create mode 100644 dep.lua
+
+diff --git a/build.lua b/build.lua
+new file mode 100644
+--- /dev/null
++++ b/build.lua
+@@ -0,0 +1,21 @@
++local pkg       = premake.extensions.pkg
++local scriptDir = pkg:scriptDir()
++local cmake     = pkg.builders.cmake
++
++local buildTool = cmake:setup("libmimalloc", { "Debug", "RelWithDebInfo", "Release" }, scriptDir, "build/", "-D MI_BUILD_TESTS=OFF")
++buildTool:mapConfigs({
++	Debug = {
++		config = "Debug",
++		targets = { mimalloc = { path = "Debug/", outputFiles = pkg:libName("mimalloc-static", true) }}
++	},
++	RelWithDebInfo = {
++		config = "Release",
++		targets = { mimalloc = { path = "RelWithDebInfo/", outputFiles = pkg:libName("mimalloc-static", true) }}
++	},
++	Release = {
++		config = "Dist",
++		targets = { mimalloc = { path = "Release/", outputFiles = pkg:libName("mimalloc-static", true) }}
++	}
++})
++buildTool:build()
++buildTool:cleanTemp()
+\ No newline at end of file
+diff --git a/dep.lua b/dep.lua
+new file mode 100644
+--- /dev/null
+@@ -0,0 +1,5 @@
++local pkg = premake.extensions.pkg
++
++libdirs({ pkg:scriptDir() .. string.format("/Bin/%s-%s-", os.host(), pkg.arch) .. "%{cfg.buildcfg}" })
++links({ "mimalloc-static" })
++externalincludedirs({ pkg:scriptDir() .. "/inc/" })
+\ No newline at end of file
+--
+2.38.1.windows.1

@@ -102,7 +102,7 @@
 		{
 			"name": "imgui",
 			"description": "Dear ImGui: Bloat-free Graphical User interface for C++ with minimal dependencies",
-			"latest_version": [ 1, 89, 1],
+			"latest_version": [ 1, 89, 1 ],
 			"versions": [
 				{
 					"version": [ 1, 89, 1 ],
@@ -265,6 +265,38 @@
 					"version": [ 1, 0, 6 ],
 					"path": "git+https://github.com/MarcasRealAccount/SimplexNoise.git",
 					"branch": "1.0.6",
+					"buildscript": "build.lua",
+					"depscript": "dep.lua"
+				}
+			]
+		},
+		{
+			"name": "mimalloc",
+			"description": "mimalloc is a compact general purpose allocator with excellent performance.",
+			"latest_version": [ 2, 1, 2 ],
+			"versions": [
+				{
+					"version": [ 2, 1, 2 ],
+					"path": "git+https://github.com/microsoft/mimalloc.git",
+					"branch": "v2.1.2",
+					"apply_patch": true,
+					"patch_version": 0,
+					"buildscript": "build.lua",
+					"depscript": "dep.lua"
+				}
+			]
+		},
+		{
+			"name": "luajit",
+			"description": "LuaJIT is a Just-In-Time Compiler (JIT) for the Lua programming language. Lua is a powerful, dynamic and light-weight programming language. It may be embedded or used as a general-purpose, stand-alone language.",
+			"latest_version": [ 2, 1, 0 ],
+			"versions": [
+				{
+					"version": [ 2, 1, 0 ],
+					"path": "git+https://github.com/LuaJIT/LuaJIT.git",
+					"branch": "v2.1",
+					"apply_patch": true,
+					"patch_version": 0,
 					"buildscript": "build.lua",
 					"depscript": "dep.lua"
 				}
