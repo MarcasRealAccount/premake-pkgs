@@ -229,12 +229,12 @@
 		{
 			"name": "vulkan-sdk",
 			"description": "Vulkan sdk package",
-			"latest_version": [ 1, 0, 1 ],
+			"latest_version": [ 1, 0, 2 ],
 			"versions": [
 				{
-					"version": [ 1, 0, 1 ],
+					"version": [ 1, 0, 2 ],
 					"path": "git+https://github.com/MarcasRealAccount/vulkan-sdk-pkg.git",
-					"branch": "1.0.1",
+					"branch": "1.0.2",
 					"buildscript": "build.lua",
 					"depscript": "dep.lua"
 				}
