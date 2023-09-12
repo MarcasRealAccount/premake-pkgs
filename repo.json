@@ -48,6 +48,7 @@
 					"version": [ 1, 0, 5 ],
 					"path": "git+https://github.com/MarcasRealAccount/CommonBuild.git",
 					"branch": "1.0.5",
+					"buildscript": "build.lua",
 					"depscript": "dep.lua"
 				},
 				{
