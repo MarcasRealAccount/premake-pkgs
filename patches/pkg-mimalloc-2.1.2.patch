@@ -48,9 +48,9 @@ new file mode 100644
 +local isWindows = os.host() == "windows"
 +
 +libdirs({ pkg:scriptDir() .. string.format("/Bin/%s-%s-", os.host(), pkg.arch) .. "%{cfg.buildcfg}" })
-+filter("configuration:debug")
++filter("configurations:Debug")
 +	links({ iif(isWindows, "mimalloc-static", "mimalloc-debug") })
-+filter("configuration:not debug")
++filter("configurations:not Debug")
 +	links({ iif(isWindows, "mimalloc-static", "mimalloc") })
 +filter({})
 +externalincludedirs({ pkg:scriptDir() .. "/include/" })
