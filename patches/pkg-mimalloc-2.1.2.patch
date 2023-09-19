@@ -4,9 +4,9 @@ Date: Mon, 03 Jul 2023 21:10:00 +0200
 Subject: [PATCH] Add premake scripts :>
 
 ---
- build.lua | 21 +++++++++++++++++++++
+ build.lua | 23 +++++++++++++++++++++++
  dep.lua   |  5 +++++
- 2 files changed, 26 insertions(+)
+ 2 files changed, 28 insertions(+)
  create mode 100644 build.lua
  create mode 100644 dep.lua
 
@@ -14,24 +14,26 @@ diff --git a/build.lua b/build.lua
 new file mode 100644
 --- /dev/null
 +++ b/build.lua
-@@ -0,0 +1,21 @@
+@@ -0,0 +1,23 @@
 +local pkg       = premake.extensions.pkg
 +local scriptDir = pkg:scriptDir()
 +local cmake     = pkg.builders.cmake
 +
-+local buildTool = cmake:setup("libmimalloc", { "Debug", "RelWithDebInfo", "Release" }, scriptDir, "build/", "-D MI_BUILD_TESTS=OFF")
++local isWindows = os.host() == "windows"
++
++local buildTool = cmake:setup("libmimalloc", { "Debug", "RelWithDebInfo", "Release" }, scriptDir, "build/", "-D MI_BUILD_TESTS=OFF -D MI_BUILD_SHARED=OFF")
 +buildTool:mapConfigs({
 +	Debug = {
 +		config = "Debug",
-+		targets = { mimalloc = { path = "Debug/", outputFiles = pkg:libName("mimalloc-static", true) }}
++		targets = { ["mimalloc-static"] = { path = "", outputFiles = pkg:libName(iif(isWindows, "mimalloc-static", "mimalloc-debug"), true) }}
 +	},
 +	RelWithDebInfo = {
 +		config = "Release",
-+		targets = { mimalloc = { path = "RelWithDebInfo/", outputFiles = pkg:libName("mimalloc-static", true) }}
++		targets = { ["mimalloc-static"] = { path = "", outputFiles = pkg:libName(iif(isWindows, "mimalloc-static", "mimalloc"), true) }}
 +	},
 +	Release = {
 +		config = "Dist",
-+		targets = { mimalloc = { path = "Release/", outputFiles = pkg:libName("mimalloc-static", true) }}
++		targets = { ["mimalloc-static"] = { path = "", outputFiles = pkg:libName(iif(isWindows, "mimalloc-static", "mimalloc"), true) }}
 +	}
 +})
 +buildTool:build()
