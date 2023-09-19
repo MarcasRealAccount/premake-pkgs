@@ -308,7 +308,7 @@
 					"path": "git+https://github.com/microsoft/mimalloc.git",
 					"branch": "v2.1.2",
 					"apply_patch": true,
-					"patch_version": 3,
+					"patch_version": 4,
 					"buildscript": "build.lua",
 					"depscript": "dep.lua"
 				}
