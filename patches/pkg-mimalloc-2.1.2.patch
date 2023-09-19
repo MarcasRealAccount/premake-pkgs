@@ -45,7 +45,7 @@ new file mode 100644
 +
 +libdirs({ pkg:scriptDir() .. string.format("/Bin/%s-%s-", os.host(), pkg.arch) .. "%{cfg.buildcfg}" })
 +links({ "mimalloc-static" })
-+externalincludedirs({ pkg:scriptDir() .. "/inc/" })
++externalincludedirs({ pkg:scriptDir() .. "/include/" })
 \ No newline at end of file
 --
 2.38.1.windows.1
