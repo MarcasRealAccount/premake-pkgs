@@ -5,8 +5,8 @@ Subject: [PATCH] Add premake scripts :>
 
 ---
  build.lua | 23 +++++++++++++++++++++++
- dep.lua   |  5 +++++
- 2 files changed, 28 insertions(+)
+ dep.lua   | 11 +++++++++++
+ 2 files changed, 34 insertions(+)
  create mode 100644 build.lua
  create mode 100644 dep.lua
 
@@ -42,11 +42,17 @@ new file mode 100644
 diff --git a/dep.lua b/dep.lua
 new file mode 100644
 --- /dev/null
-@@ -0,0 +1,5 @@
+@@ -0,0 +1,11 @@
 +local pkg = premake.extensions.pkg
 +
++local isWindows = os.host() == "windows"
++
 +libdirs({ pkg:scriptDir() .. string.format("/Bin/%s-%s-", os.host(), pkg.arch) .. "%{cfg.buildcfg}" })
-+links({ "mimalloc-static" })
++filter("configuration:debug")
++	links({ iif(isWindows, "mimalloc-static", "mimalloc-debug") })
++filter("configuration:not debug")
++	links({ iif(isWindows, "mimalloc-static", "mimalloc") })
++filter({})
 +externalincludedirs({ pkg:scriptDir() .. "/include/" })
 \ No newline at end of file
 --
