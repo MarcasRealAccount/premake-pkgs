@@ -56,12 +56,12 @@
 		{
 			"name": "backtrace",
 			"description": "Backtrace library for C++",
-			"latest_version": [ 2, 0, 0 ],
+			"latest_version": [ 2, 0, 1 ],
 			"versions": [
 				{
-					"version": [ 2, 0, 0 ],
+					"version": [ 2, 0, 1 ],
 					"path": "git+https://github.com/MarcasRealAccount/Backtrace.git",
-					"branch": "2.0.0",
+					"branch": "2.0.1",
 					"buildscript": "build.lua",
 					"depscript": "dep.lua"
 				},
