@@ -1,0 +1,65 @@
+From 7c188261dfc6e3251af2231f59aec3c86d20de8a Mon Sep 17 00:00:00 2001
+From: MarcasRealAccount <thetremine.lumicks@gmail.com>
+Date: Fri, 10 May 2024 4:10:00 +0100
+Subject: [PATCH] Add premake scripts :>
+
+---
+ build.lua | 21 +++++++++++++++++++++
+ dep.lua   | 18 ++++++++++++++++++
+ 2 files changed, 39 insertions(+)
+ create mode 100644 build.lua
+ create mode 100644 dep.lua
+
+diff --git a/build.lua b/build.lua
+new file mode 100644
+--- /dev/null
++++ b/build.lua
+@@ -0,0 +1,21 @@
++local pkg       = premake.extensions.pkg
++local scriptDir = pkg:scriptDir()
++local cmake     = pkg.builders.cmake
++
++local buildTool = cmake:setup("GLFW", { "Debug", "RelWithDebInfo", "Release" }, scriptDir, "build/", "-D USE_MSVC_RUNTIME_LIBRARY_DLL=1 -D GLFW_BUILD_TESTS=0 -D GLFW_BUILD_EXAMPLES=0 -D GLFW_BUILD_DOCS=0 -D GLFW_INSTALL=0")
++buildTool:mapConfigs({
++	Debug = {
++		config  = "Debug",
++		targets = { glfw = { path = "src/", outputFiles = pkg:libName("glfw3", true) } }
++	},
++	RelWithDebInfo = {
++		config  = "Release",
++		targets = { glfw = { path = "src/", outputFiles = pkg:libName("glfw3", true) } }
++	},
++	Release = {
++		config  = "Dist",
++		targets = { glfw = { path = "src/", outputFiles = pkg:libName("glfw3", false) } }
++	}
++})
++buildTool:build()
++buildTool:cleanTemp()
+\ No newline at end of file
+diff --git a/dep.lua b/dep.lua
+new file mode 100644
+--- /dev/null
++++ b/dep.lua
+@@ -0,0 +1,18 @@
++local pkg = premake.extensions.pkg
++
++filter("system:linux")
++	links({ "dl", "X11" })
++	linkoptions({ "-pthread" })
++
++filter("system:macosx")
++	links({
++		"CoreGraphics.framework",
++		"IOKit.framework",
++		"AppKit.framework"
++	})
++
++filter({})
++
++libdirs({ pkg:scriptDir() .. string.format("/Bin/%s-%s-", os.host(), pkg.arch) .. "%{cfg.buildcfg}" })
++links({ "glfw3" })
++externalincludedirs({ pkg:scriptDir() .. "/include/" })
+\ No newline at end of file
+-- 
+2.38.1.windows.1

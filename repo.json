@@ -98,8 +98,17 @@
 		{
 			"name": "glfw",
 			"description": "A multi-platform library for OpenGL, OpenGL ES, Vulkan, window and input",
-			"latest_version": [ 3, 3, 8 ],
+			"latest_version": [ 3, 4, 0 ],
 			"versions": [
+				{
+					"version": [ 3, 4, 0 ],
+					"path": "git+https://github.com/glfw/glfw.git",
+					"branch": "3.4",
+					"apply_patch": true,
+					"patch_version": 1,
+					"buildscript": "build.lua",
+					"depscript": "dep.lua"
+				},
 				{
 					"version": [ 3, 3, 8 ],
 					"path": "git+https://github.com/glfw/glfw.git",
