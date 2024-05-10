@@ -140,8 +140,17 @@
 		{
 			"name": "imgui",
 			"description": "Dear ImGui: Bloat-free Graphical User interface for C++ with minimal dependencies",
-			"latest_version": [ 1, 89, 1 ],
+			"latest_version": [ 1, 90, 6 ],
 			"versions": [
+				{
+					"version": [ 1, 90, 6 ],
+					"path": "git+https://github.com/ocornut/imgui.git",
+					"branch": "v1.90.6",
+					"apply_patch": true,
+					"patch_version": 5,
+					"buildscript": "build.lua",
+					"depscript": "dep.lua"
+				},
 				{
 					"version": [ 1, 89, 1 ],
 					"path": "git+https://github.com/ocornut/imgui.git",
@@ -156,8 +165,18 @@
 		{
 			"name": "imgui-docking",
 			"description": "Dear ImGui: Bloat-free Graphical User interface for C++ with minimal dependencies (docking branch)",
-			"latest_version": [ 1, 0, 0 ],
+			"latest_version": [ 1, 1, 0 ],
 			"versions": [
+				{
+					"version": [ 1, 1, 0 ],
+					"path": "git+https://github.com/ocornut/imgui.git",
+					"branch": "docking",
+					"commit": "e391fe2e66eb1c96b1624ae8444dc64c23146ef4",
+					"apply_patch": true,
+					"patch_version": 4,
+					"buildscript": "build.lua",
+					"depscript": "dep.lua"
+				},
 				{
 					"version": [ 1, 0, 0 ],
 					"path": "git+https://github.com/ocornut/imgui.git",
