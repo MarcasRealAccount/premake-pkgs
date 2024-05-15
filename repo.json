@@ -42,8 +42,15 @@
 		{
 			"name": "commonbuild",
 			"description": "",
-			"latest_version": [ 1, 0, 11 ],
+			"latest_version": [ 1, 0, 12 ],
 			"versions": [
+				{
+					"version": [ 1, 0, 12 ],
+					"path": "git+https://github.com/MarcasRealAccount/CommonBuild.git",
+					"branch": "1.0.12",
+					"buildscript": "build.lua",
+					"depscript": "dep.lua"
+				},
 				{
 					"version": [ 1, 0, 11 ],
 					"path": "git+https://github.com/MarcasRealAccount/CommonBuild.git",
