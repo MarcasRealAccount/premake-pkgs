@@ -42,8 +42,15 @@
 		{
 			"name": "commonbuild",
 			"description": "",
-			"latest_version": [ 1, 0, 21 ],
+			"latest_version": [ 1, 0, 22 ],
 			"versions": [
+				{
+					"version": [ 1, 0, 22 ],
+					"path": "git+https://github.com/MarcasRealAccount/CommonBuild.git",
+					"branch": "1.0.22",
+					"buildscript": "build.lua",
+					"depscript": "dep.lua"
+				},
 				{
 					"version": [ 1, 0, 21 ],
 					"path": "git+https://github.com/MarcasRealAccount/CommonBuild.git",
@@ -407,8 +414,17 @@
 		{
 			"name": "mimalloc",
 			"description": "mimalloc is a compact general purpose allocator with excellent performance.",
-			"latest_version": [ 2, 1, 2 ],
+			"latest_version": [ 3, 2, 8 ],
 			"versions": [
+				{
+					"version": [ 3, 2, 8 ],
+					"path": "git+https://github.com/microsoft/mimalloc.git",
+					"branch": "v3.2.8",
+					"apply_patch": true,
+					"patch_version": 1,
+					"buildscript": "build.lua",
+					"depscript": "dep.lua"
+				},
 				{
 					"version": [ 2, 1, 2 ],
 					"path": "git+https://github.com/microsoft/mimalloc.git",
