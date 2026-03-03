@@ -14,26 +14,24 @@ diff --git a/build.lua b/build.lua
 new file mode 100644
 --- /dev/null
 +++ b/build.lua
-@@ -0,0 +1,23 @@
+@@ -0,0 +1,21 @@
 +local pkg       = premake.extensions.pkg
 +local scriptDir = pkg:scriptDir()
 +local cmake     = pkg.builders.cmake
-+
-+local isWindows = os.host() == "windows"
 +
 +local buildTool = cmake:setup("libmimalloc", { "Debug", "RelWithDebInfo", "Release" }, scriptDir, "build/", "-D MI_BUILD_TESTS=OFF -D MI_BUILD_SHARED=OFF")
 +buildTool:mapConfigs({
 +	Debug = {
 +		config = "Debug",
-+		targets = { ["mimalloc-static"] = { path = "", outputFiles = pkg:libName(iif(isWindows, "mimalloc-static", "mimalloc-debug"), true) }}
++		targets = { ["mimalloc-static"] = { path = "", outputFiles = pkg:libName("mimalloc", true) }}
 +	},
 +	RelWithDebInfo = {
 +		config = "Release",
-+		targets = { ["mimalloc-static"] = { path = "", outputFiles = pkg:libName(iif(isWindows, "mimalloc-static", "mimalloc"), true) }}
++		targets = { ["mimalloc-static"] = { path = "", outputFiles = pkg:libName("mimalloc", true) }}
 +	},
 +	Release = {
 +		config = "Dist",
-+		targets = { ["mimalloc-static"] = { path = "", outputFiles = pkg:libName(iif(isWindows, "mimalloc-static", "mimalloc"), true) }}
++		targets = { ["mimalloc-static"] = { path = "", outputFiles = pkg:libName("mimalloc", true) }}
 +	}
 +})
 +buildTool:build()
@@ -42,17 +40,11 @@ new file mode 100644
 diff --git a/dep.lua b/dep.lua
 new file mode 100644
 --- /dev/null
-@@ -0,0 +1,11 @@
+@@ -0,0 +1,5 @@
 +local pkg = premake.extensions.pkg
 +
-+local isWindows = os.host() == "windows"
-+
 +libdirs({ pkg:scriptDir() .. string.format("/Bin/%s-%s-", os.host(), pkg.arch) .. "%{cfg.buildcfg}" })
-+filter("configurations:Debug")
-+	links({ iif(isWindows, "mimalloc-static", "mimalloc-debug") })
-+filter("configurations:not Debug")
-+	links({ iif(isWindows, "mimalloc-static", "mimalloc") })
-+filter({})
++links({ "mimalloc" })
 +externalincludedirs({ pkg:scriptDir() .. "/include/" })
 \ No newline at end of file
 --
