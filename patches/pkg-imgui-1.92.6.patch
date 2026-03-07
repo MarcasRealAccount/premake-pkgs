@@ -1,0 +1,109 @@
+From a8df192df022ed6ac447e7b7ada718c4c4824b41 Thu Nov 24 21:24:00 2022
+From: MarcasRealAccount <thetremine.lumicks@gmail.com>
+Date: Fri, 18 Jan 2023 16:35:00 +0100
+Subject: [PATCH] Add premake scripts :>
+
+---
+ premake5.lua | 40 ++++++++++++++++++++++++++++++++++++++++
+ build.lua    | 30 ++++++++++++++++++++++++++++++
+ dep.lua      | 5  +++++
+ 2 files changed, 75 insertions(+)
+ create mode 100644 premake5.lua
+ create mode 100644 build.lua
+ create mode 100644 dep.lua
+
+diff --git a/premake5.lua b/premake5.lua
+new file mode 100644
+--- /dev/null
++++ b/premake5.lua
+@@ -0,0 +1,40 @@
++workspace("imgui")
++	location("%{wks.location}/build/")
++	configurations({ "Debug", "Release", "Dist" })
++	platforms({ "amd64" })
++	filter("platforms:amd64")
++		architecture("amd64")
++	filter("configurations:Debug")
++		optimize("Off")
++		symbols("On")
++	filter("configurations:Release")
++		optimize("Full")
++		symbols("On")
++	filter("configurations:Dist")
++		optimize("Full")
++		symbols("Off")
++	filter({})
++	cppdialect("C++20")
++	rtti("Off")
++	exceptionhandling("Off")
++	flags("MultiProcessorCompile")
++	project("imgui")
++		location("%{wks.location}/build/")
++		kind("StaticLib")
++		targetdir("%{wks.location}/build/imgui/%{cfg.buildcfg}")
++		objdir("%{wks.location}/build/imgui/%{cfg.buildcfg}")
++		includedirs({ "%{wks.location}" })
++		files({
++			"{wks.location}/imgui.cpp",
++			"{wks.location}/imgui_draw.cpp",
++			"{wks.location}/imgui_tables.cpp",
++			"{wks.location}/imgui_widgets.cpp"
++		})
++
++	project("imgui_demo")
++		location("%{wks.location}/build/")
++		kind("StaticLib")
++		targetdir("%{wks.location}/build/imgui_demo/%{cfg.buildcfg}")
++		objdir("%{wks.location}/build/imgui_demo/%{cfg.buildcfg}")
++		includedirs({ "%{wks.location}" })
++		files({ "{wks.location}/imgui_demo.cpp" })
+\ No newline at end of file
+diff --git a/build.lua b/build.lua
+new file mode 100644
+--- /dev/null
++++ b/build.lua
+@@ -0,0 +1,30 @@
++local pkg       = premake.extensions.pkg
++local scriptDir = pkg:scriptDir()
++local premake   = pkg.builders.premake
++
++local buildTool = premake:setup("imgui", "amd64", { "Debug", "Release", "Dist" }, scriptDir, "build/", "%{targetname}/%{config}")
++buildTool:mapConfigs({
++	Debug = {
++		config  = "Debug",
++		targets = {
++			imgui      = { path = "imgui/", outputFiles = pkg:libName("imgui", true) },
++			imgui_demo = { path = "imgui_demo/", outputFiles = pkg:libName("imgui_demo", true) }
++		}
++	}
++	Release = {
++		config  = "Release",
++		targets = {
++			imgui      = { path = "imgui/", outputFiles = pkg:libName("imgui", true) },
++			imgui_demo = { path = "imgui_demo/", outputFiles = pkg:libName("imgui_demo", true) }
++		}
++	}
++	Dist = {
++		config  = "Dist",
++		targets = {
++			imgui      = { path = "imgui/", outputFiles = pkg:libName("imgui", false) },
++			imgui_demo = { path = "imgui_demo/", outputFiles = pkg:libName("imgui_demo", false) }
++		}
++	}
++})
++buildTool:build()
++buildTool:cleanTemp()
+\ No newline at end of file
+diff --git a/dep.lua b/dep.lua
+new file mode 100644
+--- /dev/null
++++ b/dep.lua
+@@ -0,0 +1,5 @@
++local pkg = premake.extensions.pkg
++
++libdirs({ pkg:scriptDir() .. string.format("/Bin/%s-%s-", os.host(), pkg.arch) .. "%{cfg.buildcfg}" })
++links({ "imgui", "imgui_demo" })
++externalincludedirs({ pkg:scriptDir() })
+\ No newline at end of file
+--
+2.38.1.windows.1
