@@ -1,0 +1,133 @@
+From 4239bc3a50014b8e6a5a2a59df1fff3b7469543b Mon Sep 17 00:00:00 2001
+From: MarcasRealAccount <thetremine.lumicks@gmail.com>
+Date: Wed, 3 Jun 2026 12:48:46 
+Subject: [PATCH] Add premake scripts :>
+
+---
+ build.lua | 21 +++++++++++++++++++++
+ dep.lua | 5 +++++
+ premake5.lua | 59 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 85 insertions(+)
+ create mode 100644 build.lua
+ create mode 100644 dep.lua
+ create mode 100644 premake5.lua
+
+diff --git a/build.lua b/build.lua
+new file mode 100644
+--- /dev/null
++++ b/build.lua
+@@ -1,0 +1,21 @@
++local pkg       = premake.extensions.pkg
++local scriptDir = pkg:scriptDir()
++local premake   = pkg.builders.premake
++
++local buildTool = premake:setup("libusb", "amd64", { "Debug", "Release", "Dist" }, scriptDir, "build/", "%{targetname}/%{config}")
++buildTool:mapConfigs({
++	Debug = {
++		config  = "Debug",
++		targets = { libusb = { path = "libusb/", outputFiles = pkg:libName("libusb", true) } }
++	},
++	Release = {
++		config  = "Release",
++		targets = { libusb = { path = "libusb/", outputFiles = pkg:libName("libusb", true) } }
++	},
++	Dist = {
++		config  = "Dist",
++		targets = { libusb = { path = "libusb/", outputFiles = pkg:libName("libusb", false) } }
++	}
++})
++buildTool:build()
++buildTool:cleanTemp()
+\ No newline at end of file
+diff --git a/dep.lua b/dep.lua
+new file mode 100644
+--- /dev/null
++++ b/dep.lua
+@@ -1,0 +1,5 @@
++local pkg = premake.extensions.pkg
++
++libdirs({ pkg:scriptDir() .. string.format("/Bin/%s-%s-", os.host(), pkg.arch) .. "%{cfg.buildcfg}" })
++links({ "libusb" })
++externalincludedirs({ pkg:scriptDir() .. "/libusb/" })
+\ No newline at end of file
+diff --git a/premake5.lua b/premake5.lua
+new file mode 100644
+--- /dev/null
++++ b/premake5.lua
+@@ -1,0 +1,73 @@
++workspace("libusb")
++	location("build/")
++	configurations({ "Debug", "Release", "Dist" })
++	platforms({ "amd64" })
++	warnings("Off")
++	filter("platforms:amd64")
++		architecture("amd64")
++	filter("configurations:Debug")
++		optimize("Off")
++		symbols("On")
++	filter("configurations:Release")
++		optimize("Full")
++		symbols("On")
++	filter("configurations:Dist")
++		optimize("Full")
++		symbols("Off")
++	filter({})
++	cdialect("C11")
++	rtti("Off")
++	exceptionhandling("Off")
++	flags("MultiProcessorCompile")
++	project("libusb")
++		location("%{wks.location}/")
++		kind("StaticLib")
++		targetdir("%{wks.location}/libusb/%{cfg.buildcfg}")
++		objdir("%{wks.location}/libusb/%{cfg.buildcfg}")
++		includedirs({ "libusb/" })
++		files({
++			"libusb/libusb.h",
++			"libusb/libusbi.h",
++			"libusb/version.h",
++			"libusb/version_nano.h",
++			"libusb/core.c",
++			"libusb/descriptor.c",
++			"libusb/hotplug.c",
++			"libusb/io.c",
++			"libusb/strerror.c",
++			"libusb/sync.c",
++		})
++		removefiles({ "*.DS_Store" })
++		filter("system:windows")
++			defines({
++				"PLATFORM_WINDOWS"
++			})
++			files({
++				"libusb/os/events_windows.h",
++				"libusb/os/events_windows.c",
++				"libusb/os/threads_windows.h",
++				"libusb/os/threads_windows.c",
++				"libusb/os/windows_common.h",
++				"libusb/os/windows_common.c",
++				"libusb/os/windows_usbdk.h",
++				"libusb/os/windows_usbdk.c",
++				"libusb/os/windows_winusb.h",
++				"libusb/os/windows_winusb.c"
++			})
++		filter("system:linux")
++			defines({
++				"PLATFORM_POSIX"
++			})
++			files({
++				"libusb/os/events_posix.h",
++				"libusb/os/events_posix.c",
++				"libusb/os/threads_posix.h",
++				"libusb/os/threads_posix.c",
++				"libusb/os/linux_netlink.c",
++				"libusb/os/linux_udev.c",
++				"libusb/os/linux_usbfs.c",
++				"libusb/os/linux_usbfs.h"
++			})
++		filter({})
++		common:addActions()
++io.writefile(common:scriptDir() .. "/libusb/config.h", "#pragma once\n#define HAVE_STRUCT_TIMESPEC 1\n#define DEFAULT_VISIBILITY\n")
+\ No newline at end of file
+--
+2.38.1.windows.1
