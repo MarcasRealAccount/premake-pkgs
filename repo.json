@@ -4,12 +4,17 @@
 		{
 			"name": "premake-common",
 			"description": "",
-			"latest_version": [ 1, 0, 0 ],
+			"latest_version": [ 1, 0, 1 ],
 			"versions": [
 				{
 					"version": [ 1, 0, 0 ],
 					"path": "git+https://github.com/MarcasRealAccount/premake-common.git",
 					"branch": "1.0.0"
+				},
+				{
+					"version": [ 1, 0, 1 ],
+					"path": "git+https://github.com/MarcasRealAccount/premake-common.git",
+					"branch": "1.0.1"
 				}
 			]
 		},
@@ -402,12 +407,21 @@
 		{
 			"name": "libusb",
 			"description": "A cross-platform library to access USB devices",
-			"latest_version": [ 1, 0, 26 ],
+			"latest_version": [ 1, 0, 30 ],
 			"versions": [
 				{
 					"version": [ 1, 0, 26 ],
 					"path": "git+https://github.com/libusb/libusb.git",
 					"branch": "v1.0.26",
+					"apply_patch": true,
+					"patch_version": 0,
+					"buildscript": "build.lua",
+					"depscript": "dep.lua"
+				},
+				{
+					"version": [ 1, 0, 30 ],
+					"path": "git+https://github.com/libusb/libusb.git",
+					"branch": "v1.0.30",
 					"apply_patch": true,
 					"patch_version": 0,
 					"buildscript": "build.lua",
