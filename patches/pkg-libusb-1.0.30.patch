@@ -6,8 +6,8 @@ Subject: [PATCH] Add premake scripts :>
 ---
  build.lua | 21 +++++++++++++++++++++
  dep.lua | 5 +++++
- premake5.lua | 89 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 115 insertions(+)
+ premake5.lua | 90 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 116 insertions(+)
  create mode 100644 build.lua
  create mode 100644 dep.lua
  create mode 100644 premake5.lua
@@ -54,7 +54,7 @@ diff --git a/premake5.lua b/premake5.lua
 new file mode 100644
 --- /dev/null
 +++ b/premake5.lua
-@@ -0,0 +1,89 @@
+@@ -0,0 +1,90 @@
 +workspace("libusb")
 +	location("build/")
 +	configurations({ "Debug", "Release", "Dist" })
