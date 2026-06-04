@@ -5,9 +5,9 @@ Subject: [PATCH] Add premake scripts :>
 
 ---
  build.lua | 21 +++++++++++++++++++++
- dep.lua | 5 +++++
+ dep.lua | 8 +++++
  premake5.lua | 90 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 116 insertions(+)
+ 3 files changed, 119 insertions(+)
  create mode 100644 build.lua
  create mode 100644 dep.lua
  create mode 100644 premake5.lua
@@ -43,12 +43,15 @@ diff --git a/dep.lua b/dep.lua
 new file mode 100644
 --- /dev/null
 +++ b/dep.lua
-@@ -0,0 +1,5 @@
+@@ -0,0 +1,8 @@
 +local pkg = premake.extensions.pkg
 +
 +libdirs({ pkg:scriptDir() .. string.format("/Bin/%s-%s-", os.host(), pkg.arch) .. "%{cfg.buildcfg}" })
 +links({ "libusb" })
 +externalincludedirs({ pkg:scriptDir() .. "/libusb/" })
++filter("system:linux")
++ links({ "udev" })
++filter({})
 \ No newline at end of file
 diff --git a/premake5.lua b/premake5.lua
 new file mode 100644
