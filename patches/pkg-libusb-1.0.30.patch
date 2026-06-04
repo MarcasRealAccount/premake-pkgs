@@ -6,8 +6,8 @@ Subject: [PATCH] Add premake scripts :>
 ---
  build.lua | 21 +++++++++++++++++++++
  dep.lua | 5 +++++
- premake5.lua | 82 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 108 insertions(+)
+ premake5.lua | 89 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 115 insertions(+)
  create mode 100644 build.lua
  create mode 100644 dep.lua
  create mode 100644 premake5.lua
@@ -54,7 +54,7 @@ diff --git a/premake5.lua b/premake5.lua
 new file mode 100644
 --- /dev/null
 +++ b/premake5.lua
-@@ -0,0 +1,82 @@
+@@ -0,0 +1,89 @@
 +workspace("libusb")
 +	location("build/")
 +	configurations({ "Debug", "Release", "Dist" })
@@ -115,10 +115,18 @@ new file mode 100644
 +			})
 +		filter("system:linux")
 +			links({ "rt", "udev", "pthread" })
++   cdialect("gnu11")
 +			defines({
 +				"PLATFORM_POSIX",
 +				"OS_LINUX=1",
-+				"USE_UDEV=1",
++    "HAVE_NFDS_T=1",
++    "HAVE_PIPE2=1",
++    "HAVE_PTHREAD_SETNAME_NP=1",
++    "HAVE_PTHREAD_CONDATTR_GETCLOCK=1",
++    "HAVE_PTHREAD_CONDATTR_SETCLOCK=1",
++    "HAVE_SYS_TIME_H=1",
++				"HAVE_LIBUDEV=1",
++    "HAVE_CLOCK_GETTIME=1",
 +				"HAVE_EVENTFD=1",
 +				"HAVE_TIMERFD=1",
 +				"DEFAULT_VISIBILITY=__attribute__((visibility(\"default\")))",
