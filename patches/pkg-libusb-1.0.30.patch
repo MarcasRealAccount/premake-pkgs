@@ -6,8 +6,8 @@ Subject: [PATCH] Add premake scripts :>
 ---
  build.lua | 21 +++++++++++++++++++++
  dep.lua | 5 +++++
- premake5.lua | 59 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 85 insertions(+)
+ premake5.lua | 82 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 108 insertions(+)
  create mode 100644 build.lua
  create mode 100644 dep.lua
  create mode 100644 premake5.lua
@@ -16,7 +16,7 @@ diff --git a/build.lua b/build.lua
 new file mode 100644
 --- /dev/null
 +++ b/build.lua
-@@ -1,0 +1,21 @@
+@@ -0,0 +1,21 @@
 +local pkg       = premake.extensions.pkg
 +local scriptDir = pkg:scriptDir()
 +local premake   = pkg.builders.premake
@@ -43,7 +43,7 @@ diff --git a/dep.lua b/dep.lua
 new file mode 100644
 --- /dev/null
 +++ b/dep.lua
-@@ -1,0 +1,5 @@
+@@ -0,0 +1,5 @@
 +local pkg = premake.extensions.pkg
 +
 +libdirs({ pkg:scriptDir() .. string.format("/Bin/%s-%s-", os.host(), pkg.arch) .. "%{cfg.buildcfg}" })
@@ -54,7 +54,7 @@ diff --git a/premake5.lua b/premake5.lua
 new file mode 100644
 --- /dev/null
 +++ b/premake5.lua
-@@ -1,0 +1,73 @@
+@@ -0,0 +1,82 @@
 +workspace("libusb")
 +	location("build/")
 +	configurations({ "Debug", "Release", "Dist" })
@@ -97,7 +97,9 @@ new file mode 100644
 +		removefiles({ "*.DS_Store" })
 +		filter("system:windows")
 +			defines({
-+				"PLATFORM_WINDOWS"
++				"PLATFORM_WINDOWS",
++				"DEFAULT_VISIBILITY",
++				"PRINTF_FORMAT(a,b)"
 +			})
 +			files({
 +				"libusb/os/events_windows.h",
@@ -112,22 +114,29 @@ new file mode 100644
 +				"libusb/os/windows_winusb.c"
 +			})
 +		filter("system:linux")
++			links({ "rt", "udev", "pthread" })
 +			defines({
-+				"PLATFORM_POSIX"
++				"PLATFORM_POSIX",
++				"OS_LINUX=1",
++				"USE_UDEV=1",
++				"HAVE_EVENTFD=1",
++				"HAVE_TIMERFD=1",
++				"DEFAULT_VISIBILITY=__attribute__((visibility(\"default\")))",
++				"PRINTF_FORMAT(a,b)=__attribute__((__format__(__printf__,a,b)))",
++				"_GNU_SOURCE=1"
 +			})
 +			files({
 +				"libusb/os/events_posix.h",
 +				"libusb/os/events_posix.c",
 +				"libusb/os/threads_posix.h",
 +				"libusb/os/threads_posix.c",
-+				"libusb/os/linux_netlink.c",
 +				"libusb/os/linux_udev.c",
 +				"libusb/os/linux_usbfs.c",
 +				"libusb/os/linux_usbfs.h"
 +			})
 +		filter({})
 +		common:addActions()
-+io.writefile(common:scriptDir() .. "/libusb/config.h", "#pragma once\n#define HAVE_STRUCT_TIMESPEC 1\n#define DEFAULT_VISIBILITY\n")
-\ No newline at end of file
++io.writefile(common:scriptDir() .. "/libusb/config.h", "#pragma once")
+
 --
 2.38.1.windows.1
