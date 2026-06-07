@@ -6,14 +6,15 @@ Subject: [PATCH] Add premake scripts :>
 ---
  build.lua    | 21 +++++++++++++++++++++
  dep.lua      |  5 +++++
- premake5.lua | 85 +++++
- 3 files changed, 111 insertions(+)
+ premake5.lua | 169 +++++
+ 3 files changed, 195 insertions(+)
  create mode 100644 build.lua
  create mode 100644 dep.lua
  create mode 100644 premake5.lua
 
 diff --git a/build.lua b/build.lua
 new file mode 100644
+index 0000000..e76e2da
 --- /dev/null
 +++ b/build.lua
 @@ -0,0 +1,21 @@
@@ -41,7 +42,9 @@ new file mode 100644
 \ No newline at end of file
 diff --git a/dep.lua b/dep.lua
 new file mode 100644
+index 0000000..6419267
 --- /dev/null
++++ b/dep.lua
 @@ -0,0 +1,5 @@
 +local pkg = premake.extensions.pkg
 +
@@ -51,17 +54,33 @@ new file mode 100644
 \ No newline at end of file
 diff --git a/premake5.lua b/premake5.lua
 new file mode 100644
+index 0000000..8e98786
 --- /dev/null
-@@ -0,0 +1,85 @@
++++ b/premake5.lua
+@@ -0,0 +1,169 @@
 +workspace("LuaJIT")
 +	location("build/")
 +	common:addConfigs()
 +
-+	cdialect("C17")
-+	cppdialect("C++20")
++	filter("system:not windows")
++		cdialect("gnu17")
++	filter("system:windows")
++		cdialect("C17")
++	filter({})
 +	rtti("Off")
-+	exceptionhandling("Off")
++	exceptionhandling("On")
 +	flags("MultiProcessorCompile")
++
++	filter("configurations:Debug")
++		optimize("Off")
++		symbols("On")
++	filter("configurations:Release")
++		optimize("Full")
++		symbols("On")
++	filter("configurations:Dist")
++		optimize("Full")
++		symbols("Off")
++	filter({})
 +
 +	project("MiniLua")
 +		location("build/")
@@ -72,9 +91,50 @@ new file mode 100644
 +		objdir("%{wks.location}/MiniLua/%{cfg.buildcfg}")
 +
 +		files({ "src/host/minilua.c" })
++	
++		filter("platforms:amd64")
++			defines({ "LUAJIT_TARGET=LUAJIT_ARCH_x64", "LLJ_ARCH_HASFPU=1", "LJ_ABI_SOFTFP=0" })
++		filter("platforms:x86")
++			defines({ "LUAJIT_TARGET=LUAJIT_ARCH_x86", "LLJ_ARCH_HASFPU=1", "LJ_ABI_SOFTFP=0" })
++		filter("platforms:arm")
++			-- Arm does not require an FPU, not sure how to check for that though
++			defines({ "LUAJIT_TARGET=LUAJIT_ARCH_arm", "LLJ_ARCH_HASFPU=1", "LJ_ABI_SOFTFP=0" })
++		filter("platforms:arm64")
++			-- "LJ_ABI_PAUTH=1" is required based on __arm64e__
++			defines({ "LUAJIT_TARGET=LUAJIT_ARCH_arm64", "LLJ_ARCH_HASFPU=1", "LJ_ABI_SOFTFP=0" })
++		filter({})
 +		
 +		postbuildcommands({
-+			"\"%{cfg.linktarget.abspath}\" ../dynasm/dynasm.lua -LN -D WIN -D JIT -D FFI -D P64 -o ../src/host/buildvm_arch.h ../src/vm_x64.dasc"
++			"cd .. && git show -s --format=%ct > src/luajit_relver.txt",
++			"cd ../src && \"../build/%{cfg.linktarget.abspath}\" host/genversion.lua"
++		})
++
++		dasmArgs = ""
++		dasmArch = ""
++		if common.arch == "x86" then
++			dasmArgs = dasmArgs .. "-D ENDIAN_LE -D FPU -D HFABI -D VER= "
++			dasmArch = "x86"
++		elseif common.arch == "amd64" then
++			dasmArgs = dasmArgs .. "-D ENDIAN_LE -D P64 -D FPU -D HFABI -D VER= "
++			dasmArch = "x64"
++		elseif common.arch == "arm" then
++			-- Arm does not require an FPU, not sure how to check for that though
++			-- Arm v8 and up
++			dasmArgs = dasmArgs .. "-D ENDIAN_LE -D FPU -D HFABI -D VER=80"
++			dasmArch = "arm"
++		elseif common.arch == "arm64" then
++			-- "-D PAUTH" is required based on __arm64e__
++			-- Arm v8 and up
++			dasmArgs = dasmArgs .. "-D ENDIAN_LE -D P64 -D FPU -D HFABI -D VER=80"
++			dasmArch = "arm64"
++		end
++		dasmArgs = dasmArgs .. "-D JIT -D FFI"
++		if common.host == "windows" then
++			dasmArgs = dasmArgs .. "-D WIN"
++		end
++
++		postbuildcommands({
++			"cd ../src && \"../build/%{cfg.linktarget.abspath}\" ../dynasm/dynasm.lua " .. dasmArgs .. " -o host/buildvm_arch.h vm_" .. dasmArch .. ".dasc"
 +		})
 +		
 +	project("BuildVM")
@@ -89,17 +149,24 @@ new file mode 100644
 +		files({ "src/host/buildvm*.c" })
 +		
 +		dependson({ "MiniLua" })
++
++		vmmode = "elfasm"
++		vmbout = "lj_vm.S"
++		if common.host == "windows" then
++			vmmode = "peobj"
++			vmbout = "lj_vm.o"
++		end
 +		
-+		allLibs = "../src/lib_base.c ../src/lib_math.c ../src/lib_bit.c ../src/lib_string.c ../src/lib_table.c ../src/lib_io.c ../src/lib_os.c ../src/lib_package.c ../src/lib_debug.c ../src/lib_jit.c ../src/lib_ffi.c ../src/lib_buffer.c"
-+		
++		allLibs = "lib_base.c lib_math.c lib_bit.c lib_string.c lib_table.c lib_io.c lib_os.c lib_package.c lib_debug.c lib_jit.c lib_ffi.c lib_buffer.c"
++
 +		postbuildcommands({
-+			"\"%{cfg.linktarget.abspath}\" -m peobj -o ../src/lj_vm.obj",
-+			"\"%{cfg.linktarget.abspath}\" -m bcdef -o ../src/lj_bcdef.h " .. allLibs,
-+			"\"%{cfg.linktarget.abspath}\" -m ffdef -o ../src/lj_ffdef.h " .. allLibs,
-+			"\"%{cfg.linktarget.abspath}\" -m libdef -o ../src/lj_libdef.h " .. allLibs,
-+			"\"%{cfg.linktarget.abspath}\" -m recdef -o ../src/lj_recdef.h " .. allLibs,
-+			"\"%{cfg.linktarget.abspath}\" -m vmdef -o ../src/jit/vmdef.lua " .. allLibs,
-+			"\"%{cfg.linktarget.abspath}\" -m folddef -o ../src/lj_folddef.h ../src/lj_opt_fold.c"
++			"cd ../src && \"../build/%{cfg.linktarget.abspath}\" -m " .. vmmode .. " -o " .. vmbout,
++			"cd ../src && \"../build/%{cfg.linktarget.abspath}\" -m bcdef -o lj_bcdef.h " .. allLibs,
++			"cd ../src && \"../build/%{cfg.linktarget.abspath}\" -m ffdef -o lj_ffdef.h " .. allLibs,
++			"cd ../src && \"../build/%{cfg.linktarget.abspath}\" -m libdef -o lj_libdef.h " .. allLibs,
++			"cd ../src && \"../build/%{cfg.linktarget.abspath}\" -m recdef -o lj_recdef.h " .. allLibs,
++			"cd ../src && \"../build/%{cfg.linktarget.abspath}\" -m vmdef -o jit/vmdef.lua " .. allLibs,
++			"cd ../src && \"../build/%{cfg.linktarget.abspath}\" -m folddef -o lj_folddef.h lj_opt_fold.c"
 +		})
 +	
 +	project("LuaJIT")
@@ -119,8 +186,30 @@ new file mode 100644
 +		})
 +		removefiles({ "*.DS_Store" })
 +		
-+		libdirs({ "src/" })
-+		links({ "lj_vm.obj" })
++		if vmbout == "lj_vm.o" then
++			libdirs({ "src/" })
++			links({ "lj_vm.obj" })
++		else
++			files({ "src/lj_vm.S" })
++			filter("files:src/lj_vm.S")
++				compileas("C")
++				cdialect("Default")
++			filter({})
++		end
++
++		defines({
++			"_FILE_OFFSET_BITS=64",
++			"_LARGEFILE_SOURCE",
++			"LUA_MULTILIB=\"lib\"",
++			"LUA_LJDIR=\"\"",
++		})
++		undefines({
++			"_FORTIFY_SOURCE"
++		})
++		filter("system:not windows")
++			buildoptions({ "-fno-stack-protector" })
++			defines({ "LUAJIT_UNWIND_EXTERNAL" })
++		filter({})
 +		
 +		dependson({ "BuildVM" })
 +		
@@ -138,5 +227,6 @@ new file mode 100644
 +		for _, header in pairs(allHeaders) do
 +			postbuildcommands(string.format("{COPYFILE} ../src/%s ../inc/%s", header, header))
 +		end
+\ No newline at end of file
 --
 2.38.1.windows.1
