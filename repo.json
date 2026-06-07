@@ -476,9 +476,9 @@
 				{
 					"version": [ 2, 1, 0 ],
 					"path": "git+https://github.com/LuaJIT/LuaJIT.git",
-					"branch": "v2.1",
+					"commit": "b925b3e3fc6771171602323b45fbe9fb8fc90369",
 					"apply_patch": true,
-					"patch_version": 0,
+					"patch_version": 1,
 					"buildscript": "build.lua",
 					"depscript": "dep.lua"
 				}
